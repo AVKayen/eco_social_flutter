@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 // each method takes a path and an optional token and returns a json-like map
 // post and put methods also take a body json-like map
 class Request {
-  static const String API = 'https://yourapi.com/';
+  static const String API = 'http://localhost:8000';
 
   static Future<Map<String, dynamic>> _sendRequest(
       Future<http.Response> Function() request) async {

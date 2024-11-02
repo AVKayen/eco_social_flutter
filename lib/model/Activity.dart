@@ -47,7 +47,7 @@ class Activity {
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
-      id: json[_JsonKeys.id],
+      id: ObjectId.fromHexString(json[_JsonKeys.id]),
       activityType: json[_JsonKeys.activityType],
       title: json[_JsonKeys.title],
       caption: json[_JsonKeys.caption],

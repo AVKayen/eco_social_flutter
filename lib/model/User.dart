@@ -67,8 +67,8 @@ class User {
   final String username;
   final int streak;
   final int points;
-  final List<String> activities;
-  final List<String> friends;
+  final List<ObjectId> activities;
+  final List<ObjectId> friends;
   final List<FriendshipRequest> incomingRequests;
   final List<FriendshipRequest> outgoingRequests;
 
@@ -85,12 +85,12 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json[_JsonKeys.id],
+      id: ObjectId.fromHexString(json[_JsonKeys.id]),
       username: json[_JsonKeys.username],
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
-      activities: List<String>.from(json[_JsonKeys.activities]),
-      friends: List<String>.from(json[_JsonKeys.friends]),
+      activities: List<ObjectId>.from(json[_JsonKeys.activities]),
+      friends: List<ObjectId>.from(json[_JsonKeys.friends]),
       incomingRequests: List<FriendshipRequest>.from(
         json[_JsonKeys.incomingRequests]
             .map((request) => FriendshipRequest.fromJson(request)),

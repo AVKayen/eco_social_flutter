@@ -13,4 +13,158 @@ abstract class UserRepository {
   Future<User> updateUser({required User user});
 
   Future<User> deleteUser({required ObjectId id});
+
+  /*
+  Future<User> addFriend(
+      {required ObjectId userId, required ObjectId friendId});
+
+  Future<User> removeFriend(
+      {required ObjectId userId, required ObjectId friendId});
+
+  Future<User> acceptFriendRequest(
+      {required ObjectId userId, required ObjectId requestId});
+
+  Future<User> rejectFriendRequest(
+      {required ObjectId userId, required ObjectId requestId});
+
+  Future<User> sendFriendRequest(
+      {required ObjectId userId, required ObjectId friendId});
+  */
+}
+
+class TemplateUserRepository implements UserRepository {
+  final List<User> _users = [
+    User(
+      id: ObjectId.fromHexString('000000000000000000000001'),
+      username: 'user1',
+      streak: 1,
+      points: 1,
+      activities: [
+        ObjectId.fromHexString('000000000000000000000003'),
+        ObjectId.fromHexString('000000000000000000000004'),
+      ],
+      friends: [],
+      incomingRequests: [],
+      outgoingRequests: [],
+    ),
+    User(
+      id: ObjectId.fromHexString('000000000000000000000002'),
+      username: 'user1',
+      streak: 1,
+      points: 1,
+      activities: [
+        ObjectId.fromHexString('000000000000000000000001'),
+        ObjectId.fromHexString('000000000000000000000002'),
+      ],
+      friends: [
+        ObjectId.fromHexString('000000000000000000000003'),
+        ObjectId.fromHexString('000000000000000000000004'),
+      ],
+      incomingRequests: [],
+      outgoingRequests: [],
+    ),
+    User(
+      id: ObjectId.fromHexString('000000000000000000000003'),
+      username: 'user1',
+      streak: 1,
+      points: 1,
+      activities: [],
+      friends: [],
+      incomingRequests: [
+        FriendshipRequest(
+          userId: ObjectId.fromHexString('000000000000000000000004'),
+          sentAt: DateTime.now(),
+        ),
+      ],
+      outgoingRequests: [],
+    ),
+    User(
+      id: ObjectId.fromHexString('000000000000000000000004'),
+      username: 'user1',
+      streak: 1,
+      points: 1,
+      activities: [],
+      friends: [],
+      incomingRequests: [],
+      outgoingRequests: [
+        FriendshipRequest(
+          userId: ObjectId.fromHexString('000000000000000000000003'),
+          sentAt: DateTime.now(),
+        ),
+      ],
+    ),
+  ];
+
+  @override
+  Future<User> getUser({required ObjectId id}) async {
+    return _users.firstWhere((user) => user.id == id);
+  }
+
+  @override
+  Future<User> getUserByToken({required String token}) async {
+    return _users
+        .firstWhere((user) => user.id == ObjectId.fromHexString(token));
+  }
+
+  @override
+  Future<User> createUser({required UserForm user}) async {
+    final newUser = User(
+      id: ObjectId(),
+      username: user.username,
+      streak: 0,
+      points: 0,
+      activities: [],
+      friends: [],
+      incomingRequests: [],
+      outgoingRequests: [],
+    );
+    _users.add(newUser);
+    return newUser;
+  }
+
+  @override
+  Future<User> updateUser({required User user}) async {
+    final index = _users.indexWhere((u) => u.id == user.id);
+    _users[index] = user;
+    return user;
+  }
+
+  @override
+  Future<User> deleteUser({required ObjectId id}) async {
+    final user = _users.firstWhere((u) => u.id == id);
+    _users.remove(user);
+    return user;
+  }
+}
+
+class HttpUserRepository implements UserRepository {
+  @override
+  Future<User> getUser({required ObjectId id}) async {
+    final response = await Request.get('/user/$id');
+    return User.fromJson(response);
+  }
+
+  @override
+  Future<User> getUserByToken({required String token}) async {
+    final response = await Request.get('/user/me', token);
+    return User.fromJson(response);
+  }
+
+  @override
+  Future<User> createUser({required UserForm user}) async {
+    final response = await Request.post('/user/user', user.toJson());
+    return User.fromJson(response);
+  }
+
+  @override
+  Future<User> updateUser({required User user}) async {
+    final response = await Request.put('/user/${user.id}', user.toJson());
+    return User.fromJson(response);
+  }
+
+  @override
+  Future<User> deleteUser({required ObjectId id}) async {
+    final response = await Request.delete('/user/$id');
+    return User.fromJson(response);
+  }
 }
