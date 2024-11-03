@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../components/ProfileWidget.dart';
 import '../model/User.dart';
 import '../repository/UserRepository.dart';
 
@@ -14,50 +15,32 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  late Future<SharedPreferences> _prefs;
+  User? _user;
+
+  void _getCurrentUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '672748d470e4e2a12d6cd21b';
+    if (token.isEmpty) {
+      throw Exception('Token not found');
+    }
+    final User user = await userRepository.getUserByToken(token: token);
+    setState(() {
+      _user = user;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _prefs = SharedPreferences.getInstance();
+    _getCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SharedPreferences>(
-      future: _prefs,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-
-        const token = '000000000000000000000001';
-        return FutureBuilder<User>(
-          future: userRepository.getUserByToken(token: token),
-          builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-
-            if (userSnapshot.hasError) {
-              return Text('Error: ${userSnapshot.error}');
-            }
-
-            final user = userSnapshot.data;
-            return Column(
-              children: [
-                Text('Name: ${user?.username ?? 'N/A'}'),
-                Text('Points: ${user?.points ?? 'N/A'}'),
-                Text('Streak: ${user?.streak ?? 'N/A'}'),
-              ],
-            );
-          },
-        );
-      },
-    );
+    return _user == null
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ProfileWidget(user: _user!);
   }
 }

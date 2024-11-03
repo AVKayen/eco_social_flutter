@@ -35,36 +35,36 @@ abstract class UserRepository {
 class TemplateUserRepository implements UserRepository {
   final List<User> _users = [
     User(
-      id: ObjectId.fromHexString('000000000000000000000001'),
+      id: ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
       username: 'user1',
       streak: 1,
       points: 1,
       activities: [
-        ObjectId.fromHexString('000000000000000000000003'),
-        ObjectId.fromHexString('000000000000000000000004'),
+        ObjectId.fromHexString('672748edb356bb7d062c5b24'),
+        ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
       ],
       friends: [],
       incomingRequests: [],
       outgoingRequests: [],
     ),
     User(
-      id: ObjectId.fromHexString('000000000000000000000002'),
+      id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
       username: 'user1',
       streak: 1,
       points: 1,
       activities: [
-        ObjectId.fromHexString('000000000000000000000001'),
-        ObjectId.fromHexString('000000000000000000000002'),
+        ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
+        ObjectId.fromHexString('672748e315d90bf94058fb04'),
       ],
       friends: [
-        ObjectId.fromHexString('000000000000000000000003'),
-        ObjectId.fromHexString('000000000000000000000004'),
+        ObjectId.fromHexString('672748edb356bb7d062c5b24'),
+        ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
       ],
       incomingRequests: [],
       outgoingRequests: [],
     ),
     User(
-      id: ObjectId.fromHexString('000000000000000000000003'),
+      id: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       username: 'user1',
       streak: 1,
       points: 1,
@@ -72,14 +72,14 @@ class TemplateUserRepository implements UserRepository {
       friends: [],
       incomingRequests: [
         FriendshipRequest(
-          userId: ObjectId.fromHexString('000000000000000000000004'),
+          userId: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
           sentAt: DateTime.now(),
         ),
       ],
       outgoingRequests: [],
     ),
     User(
-      id: ObjectId.fromHexString('000000000000000000000004'),
+      id: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
       username: 'user1',
       streak: 1,
       points: 1,
@@ -88,7 +88,7 @@ class TemplateUserRepository implements UserRepository {
       incomingRequests: [],
       outgoingRequests: [
         FriendshipRequest(
-          userId: ObjectId.fromHexString('000000000000000000000003'),
+          userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
           sentAt: DateTime.now(),
         ),
       ],
