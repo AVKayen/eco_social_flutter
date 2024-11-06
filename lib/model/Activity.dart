@@ -6,6 +6,9 @@ class _JsonKeys {
   static const String title = 'title';
   static const String caption = 'caption';
   static const String images = 'images';
+  static const String userId = 'user_id';
+  static const String streak = 'streak';
+  static const String points = 'points';
 }
 
 class ActivityType {
@@ -74,6 +77,9 @@ class Activity {
   final ObjectId id;
   final String activityName;
   final String title;
+  final ObjectId userId;
+  final int streak;
+  final int points;
   final String? caption;
   final List<String>? images;
 
@@ -81,6 +87,9 @@ class Activity {
     required this.id,
     required this.activityName,
     required this.title,
+    required this.userId,
+    required this.streak,
+    required this.points,
     this.caption,
     this.images,
   });
@@ -90,6 +99,9 @@ class Activity {
       id: ObjectId.fromHexString(json[_JsonKeys.id]),
       activityName: activityTypeName[json[_JsonKeys.activityType]]!,
       title: json[_JsonKeys.title],
+      userId: ObjectId.fromHexString(json[_JsonKeys.userId]),
+      streak: json[_JsonKeys.streak],
+      points: json[_JsonKeys.points],
       caption: json[_JsonKeys.caption],
       images: json[_JsonKeys.images] != null
           ? List<String>.from(json[_JsonKeys.images])
@@ -103,6 +115,9 @@ class Activity {
       _JsonKeys.activityType: activityTypeName.entries
           .firstWhere((entry) => entry.value == activityName)
           .key,
+      _JsonKeys.userId: userId.oid,
+      _JsonKeys.streak: streak,
+      _JsonKeys.points: points,
       _JsonKeys.title: title,
       _JsonKeys.caption: caption,
       _JsonKeys.images: images,

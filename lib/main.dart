@@ -6,6 +6,8 @@ import 'view/ProfileView.dart';
 import 'model/User.dart';
 import 'repository/UserRepository.dart';
 
+final _userRepository = TemplateUserRepository();
+
 void main() {
   runApp(const EcoSocial());
 }
@@ -58,7 +60,7 @@ class _ViewState extends State<View> {
     if (token.isEmpty) {
       throw Exception('Token not found');
     }
-    final User user = await userRepository.getUserByToken(token: token);
+    final User user = await _userRepository.getUserByToken(token: token);
     setState(() {
       _user = user;
       _isUserLoaded = true;

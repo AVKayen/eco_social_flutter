@@ -9,8 +9,8 @@ import '../../components/ActivityWidget.dart';
 import '../model/Activity.dart';
 import '../repository/ActivityRepository.dart';
 
-final userRepository = TemplateUserRepository();
-final activityRepository = TemplateActivityRepository();
+final _userRepository = TemplateUserRepository();
+final _activityRepository = TemplateActivityRepository();
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -29,15 +29,14 @@ class _ProfileViewState extends State<ProfileView> {
     if (token.isEmpty) {
       throw Exception('Token not found');
     }
-    final User user = await userRepository.getUserByToken(token: token);
+    final User user = await _userRepository.getUserByToken(token: token);
     setState(() {
       _user = user;
     });
 
     for (final ObjectId activityId in user.activities) {
-      print("Activity ID: $activityId");
       final Activity? activity =
-          await activityRepository.getActivity(id: activityId);
+          await _activityRepository.getActivity(id: activityId);
       if (activity != null) {
         setState(() {
           _activities.add(activity);

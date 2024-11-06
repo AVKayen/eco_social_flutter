@@ -1,8 +1,17 @@
 import 'package:bson/bson.dart';
 
+Function calculateLevel = (int points) {
+  return points ~/ 100;
+};
+
+Function calculateProgress = (int points) {
+  return points % 100;
+};
+
 class _JsonKeys {
   static const String id = '_id';
   static const String username = 'username';
+  static const String picture = 'profile_picture';
   static const String password = 'password';
   static const String streak = 'streak';
   static const String points = 'points';
@@ -63,10 +72,13 @@ class FriendshipRequest {
 }
 
 class User {
+  final String? picture;
   final ObjectId id;
   final String username;
   final int streak;
   final int points;
+  final int level;
+  final int progress;
   final List<ObjectId> activities;
   final List<ObjectId> friends;
   final List<FriendshipRequest> incomingRequests;
@@ -75,8 +87,11 @@ class User {
   User({
     required this.id,
     required this.username,
-    this.streak = 0,
-    this.points = 0,
+    this.picture,
+    required this.streak,
+    required this.points,
+    this.level = 0,
+    this.progress = 0,
     this.activities = const [],
     this.friends = const [],
     this.incomingRequests = const [],
@@ -87,8 +102,11 @@ class User {
     return User(
       id: ObjectId.fromHexString(json[_JsonKeys.id]),
       username: json[_JsonKeys.username],
+      picture: json[_JsonKeys.picture],
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
+      level: calculateLevel(json[_JsonKeys.points]),
+      progress: calculateProgress(json[_JsonKeys.points]),
       activities: List<ObjectId>.from(json[_JsonKeys.activities]),
       friends: List<ObjectId>.from(json[_JsonKeys.friends]),
       incomingRequests: List<FriendshipRequest>.from(
@@ -104,7 +122,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
-      _JsonKeys.id: id,
+      _JsonKeys.id: id.oid,
       _JsonKeys.username: username,
       _JsonKeys.streak: streak,
       _JsonKeys.points: points,

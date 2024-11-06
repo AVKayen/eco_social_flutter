@@ -25,6 +25,9 @@ class TemplateActivityRepository implements ActivityRepository {
       id: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       activityName: ActivityName.trashPicking,
       title: 'Picked up trash',
+      streak: 1,
+      points: 1,
+      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I picked up trash in the park',
       images: ['https://example.com/image.jpg'],
     ),
@@ -32,6 +35,9 @@ class TemplateActivityRepository implements ActivityRepository {
       id: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
       activityName: ActivityName.plantTree,
       title: 'Planted a tree',
+      streak: 1,
+      points: 1,
+      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I planted a tree in my garden',
       images: ['https://example.com/image.jpg'],
     ),
@@ -39,6 +45,9 @@ class TemplateActivityRepository implements ActivityRepository {
       id: ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
       activityName: ActivityName.buyLocal,
       title: 'Bought local',
+      streak: 1,
+      points: 1,
+      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I bought local produce from the market',
       images: ['https://example.com/image.jpg'],
     ),
@@ -46,6 +55,9 @@ class TemplateActivityRepository implements ActivityRepository {
       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
       activityName: ActivityName.reduceWater,
       title: 'Reduced water usage',
+      streak: 1,
+      points: 1,
+      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I reduced my water usage by taking shorter showers',
       images: ['https://example.com/image.jpg'],
     ),
@@ -53,16 +65,10 @@ class TemplateActivityRepository implements ActivityRepository {
 
   @override
   Future<Activity?> getActivity({required ObjectId id}) async {
-    print('Getting activity with id: $id');
-    print('Available activities:');
-    for (var activity in _activities) {
-      print('Activity id: ${activity.id}');
-    }
     try {
       final activity = _activities.firstWhere((a) => a.id == id);
       return activity;
     } catch (e) {
-      print('Error getting activity: $e');
       return null;
     }
   }

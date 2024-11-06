@@ -20,19 +20,20 @@ class ProfileWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/afd2a691-136e-45aa-b282-8b2913755418/dfi1ani-8d64366f-e428-4f28-8a73-4344be58761c.png/v1/fit/w_750,h_750,q_70,strp/furry_sketch_commission_by_syronica_dfi1ani-375w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2FmZDJhNjkxLTEzNmUtNDVhYS1iMjgyLThiMjkxMzc1NTQxOFwvZGZpMWFuaS04ZDY0MzY2Zi1lNDI4LTRmMjgtOGE3My00MzQ0YmU1ODc2MWMucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.qkBI_St0TfZIW6eaKlc4bblGnTvtCz3dnaOQ3Icf4OE'),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
+          (user.picture != null)
+              ? AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      image: DecorationImage(
+                        image: NetworkImage(user.picture!),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           const SizedBox(width: 10),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
