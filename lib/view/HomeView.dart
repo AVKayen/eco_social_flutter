@@ -20,8 +20,8 @@ class _HomeViewState extends State<HomeView> {
 
   void _getActivites() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token') ?? '672748d470e4e2a12d6cd21b';
-    if (token.isEmpty) {
+    final String? token = prefs.getString('token');
+    if (token == null || token.isEmpty) {
       throw Exception('Token not found');
     }
     final List<Activity> activities = await _activityRepository

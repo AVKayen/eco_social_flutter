@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'view/HomeView.dart';
-import 'view/ProfileView.dart';
-import 'model/User.dart';
-import 'repository/UserRepository.dart';
+import 'MainView.dart';
 
-final _userRepository = TemplateUserRepository();
+import 'repository/AuthRepository.dart';
+
+final AuthRepository _authRepository = TemplateAuthRepository();
 
 void main() {
   runApp(const EcoSocial());
@@ -26,147 +25,49 @@ class EcoSocial extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
       ),
-      home: const View(),
+      home: const App(),
     );
   }
 }
 
-class View extends StatefulWidget {
-  const View({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   @override
-  State<View> createState() => _ViewState();
+  State<App> createState() => _App();
 }
 
-class _ViewState extends State<View> {
-  int _selectedIndex = 0;
-  late User _user;
-  bool _isUserLoaded = false;
-
+class _App extends State<App> {
   void setDefaultPrefs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', '672748d470e4e2a12d6cd21b');
+    await prefs.setString('token', '672748e315d90bf94058fb04');
   }
 
-  static const List<Map<String, dynamic>> _pages = [
-    {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
-    {'title': 'Post', 'icon': Icons.add_box},
-    {'title': 'Profile', 'body': ProfileView(), 'icon': Icons.person},
-  ];
+  void _check_login() async {
+    setDefaultPrefs();
 
-  void _getCurrentUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token') ?? '672748d470e4e2a12d6cd21b';
-    if (token.isEmpty) {
-      throw Exception('Token not found');
+    final String? token = prefs.getString('token');
+
+    if (token != null && token.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MainView()),
+      );
     }
-    final User user = await _userRepository.getUserByToken(token: token);
-    setState(() {
-      _user = user;
-      _isUserLoaded = true;
-      print("User loaded: $_user");
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    setDefaultPrefs();
-    _getCurrentUser();
-  }
-
-  void _onItemTapped(int index) {
-    if (index == 1) {
-      _showPostModalBottomSheet();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
-  void _showPostModalBottomSheet() {
-    TextEditingController postController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text(
-                  'Create a new post',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: postController,
-                  decoration: const InputDecoration(
-                    hintText: 'Description (optional)',
-                    border: OutlineInputBorder(),
-                  ),
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Post submitted successfully')),
-                    );
-                  },
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    _check_login();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex]['body'],
-      appBar: AppBar(
-        title: Row(
-          // TODO: Change text to Icons and add a progress to next level bar
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(_pages[_selectedIndex]['title']),
-            if (_isUserLoaded)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('Streak: ${_user.streak}',
-                      style: const TextStyle(fontSize: 16)),
-                  const SizedBox(width: 16),
-                  Text('Points: ${_user.points}',
-                      style: const TextStyle(fontSize: 16)),
-                ],
-              ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _pages.map((page) {
-          return BottomNavigationBarItem(
-            icon: Icon(page['icon']),
-            label: page['title'],
-          );
-        }).toList(),
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
-        onTap: _onItemTapped,
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }

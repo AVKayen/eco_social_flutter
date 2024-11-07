@@ -9,6 +9,8 @@ Function calculateProgress = (int points) {
 };
 
 class _JsonKeys {
+  static const String token = 'access_token';
+  static const String tokenType = 'token_type';
   static const String id = '_id';
   static const String username = 'username';
   static const String picture = 'profile_picture';
@@ -43,6 +45,30 @@ class UserForm {
     return UserForm(
       username: json[_JsonKeys.username],
       password: json[_JsonKeys.password],
+    );
+  }
+}
+
+class Token {
+  final String token;
+  final String token_type;
+
+  Token({
+    required this.token,
+    this.token_type = 'Bearer',
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      _JsonKeys.token: token,
+      _JsonKeys.tokenType: token_type,
+    };
+  }
+
+  factory Token.fromJson(Map<String, dynamic> json) {
+    return Token(
+      token: json[_JsonKeys.token],
+      token_type: json[_JsonKeys.tokenType],
     );
   }
 }

@@ -51,7 +51,7 @@ class TemplateUserRepository implements UserRepository {
       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
       username: 'user1',
       streak: 1,
-      points: 1,
+      points: 41,
       activities: [
         ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
         ObjectId.fromHexString('672748e315d90bf94058fb04'),
