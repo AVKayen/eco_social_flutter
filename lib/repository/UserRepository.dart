@@ -50,7 +50,7 @@ class TemplateUserRepository implements UserRepository {
     ),
     User(
       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
-      username: 'user1',
+      username: 'user2',
       streak: 1,
       points: 41,
       picture: 'https://picsum.photos/200',
@@ -67,7 +67,7 @@ class TemplateUserRepository implements UserRepository {
     ),
     User(
       id: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
-      username: 'user1',
+      username: 'user3',
       streak: 1,
       points: 1,
       activities: [],
@@ -82,7 +82,7 @@ class TemplateUserRepository implements UserRepository {
     ),
     User(
       id: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
-      username: 'user1',
+      username: 'user4',
       streak: 1,
       points: 1,
       activities: [],

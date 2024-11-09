@@ -22,12 +22,12 @@ abstract class ActivityRepository {
 class TemplateActivityRepository implements ActivityRepository {
   final List<Activity> _activities = [
     Activity(
-      id: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
+      id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
       activityName: ActivityName.trashPicking,
       title: 'Picked up trash',
       streak: 1,
       points: 1,
-      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
+      userId: ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
       caption: 'I picked up trash in the park',
       images: ['https://picsum.photos/200'],
     ),
@@ -57,7 +57,7 @@ class TemplateActivityRepository implements ActivityRepository {
       title: 'Reduced water usage',
       streak: 1,
       points: 1,
-      userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
+      userId: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
       caption: 'I reduced my water usage by taking shorter showers',
       images: ['https://picsum.photos/200'],
     ),

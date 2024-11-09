@@ -16,7 +16,7 @@ class TemplateAuthRepository implements AuthRepository {
   Future<Token?> login({required UserForm user}) async {
     final Token token = Token(
       token: '672748d470e4e2a12d6cd21b',
-      token_type: 'Bearer',
+      tokenType: 'Bearer',
     );
 
     return token;

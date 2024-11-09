@@ -51,24 +51,24 @@ class UserForm {
 
 class Token {
   final String token;
-  final String token_type;
+  final String tokenType;
 
   Token({
     required this.token,
-    this.token_type = 'Bearer',
+    this.tokenType = 'Bearer',
   });
 
   Map<String, dynamic> toJson() {
     return {
       _JsonKeys.token: token,
-      _JsonKeys.tokenType: token_type,
+      _JsonKeys.tokenType: tokenType,
     };
   }
 
   factory Token.fromJson(Map<String, dynamic> json) {
     return Token(
       token: json[_JsonKeys.token],
-      token_type: json[_JsonKeys.tokenType],
+      tokenType: json[_JsonKeys.tokenType],
     );
   }
 }

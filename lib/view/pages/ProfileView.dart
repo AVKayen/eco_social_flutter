@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bson/bson.dart';
 
 import '../../components/ProfileWidget.dart';
@@ -13,10 +12,9 @@ final _userRepository = TemplateUserRepository();
 final _activityRepository = TemplateActivityRepository();
 
 class ProfileView extends StatefulWidget {
-  final User user;
-  final ObjectId? profileId;
+  final ObjectId profileId;
 
-  const ProfileView({super.key, required this.user, this.profileId});
+  const ProfileView({super.key, required this.profileId});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -27,20 +25,14 @@ class _ProfileViewState extends State<ProfileView> {
   final List<Activity> _activities = [];
 
   void _getProfile() async {
-    if (widget.profileId != null) {
-      final User? profile =
-          await _userRepository.getUser(id: widget.profileId!);
-      if (profile == null) {
-        throw Exception('User not found');
-      }
-      setState(() {
-        _profile = profile;
-      });
-    } else {
-      setState(() {
-        _profile = widget.user;
-      });
+    final User? profile = await _userRepository.getUser(id: widget.profileId);
+    if (profile == null) {
+      throw Exception('User not found');
     }
+    setState(() {
+      _profile = profile;
+    });
+
     for (final ObjectId activityId in _profile!.activities) {
       final Activity? activity =
           await _activityRepository.getActivity(id: activityId);
@@ -51,7 +43,14 @@ class _ProfileViewState extends State<ProfileView> {
       }
     }
   }
-
+  @override
+  void didUpdateWidget(ProfileView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.profileId != widget.profileId) {
+      _getProfile();
+      _activities.clear();
+    }
+  }
   @override
   void initState() {
     super.initState();

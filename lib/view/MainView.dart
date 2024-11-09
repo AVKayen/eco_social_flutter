@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
-import 'pages/HomeView.dart';
+import '../controller/CurrentPage.dart';
+import './pages/HomeView.dart';
 import 'pages/ProfileView.dart';
 import '../model/User.dart';
 import '../repository/UserRepository.dart';
@@ -9,7 +11,10 @@ import '../repository/UserRepository.dart';
 final _userRepository = TemplateUserRepository();
 
 class MainView extends StatefulWidget {
-  const MainView({super.key});
+  const MainView({
+    super.key,
+    Widget page = const HomeView(),
+  });
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -17,6 +22,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
+  final currentPage = CurrentPage();
   late User? _user;
   late List<Map<String, dynamic>> _pages = [];
 
@@ -38,7 +44,7 @@ class _MainViewState extends State<MainView> {
         const {'title': 'Post', 'icon': Icons.add_box},
         {
           'title': 'Profile',
-          'body': ProfileView(user: _user!, profileId: null),
+          'body': ProfileView(profileId: _user!.id),
           'icon': Icons.person
         },
       ];
@@ -48,6 +54,7 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
+    currentPage.setCurrentPage(const HomeView());
     _getCurrentUser();
   }
 
@@ -57,6 +64,7 @@ class _MainViewState extends State<MainView> {
     } else {
       setState(() {
         _selectedIndex = index;
+        currentPage.setCurrentPage(_pages[index]['body']);
       });
     }
   }
@@ -111,48 +119,64 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return (_pages == [] || _user == null)
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            body: _pages[_selectedIndex]['body'],
-            appBar: AppBar(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(_pages[_selectedIndex]['title']),
-                  if (_user != null)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.local_fire_department,
-                        ),
-                        Text('${_user!.streak}',
-                            style: const TextStyle(fontSize: 16)),
-                        const SizedBox(width: 16),
-                        const Icon(
-                          Icons.star,
-                        ),
-                        Text('${_user!.points}',
-                            style: const TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                ],
-              ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          currentPage.goBack();
+        }
+      },
+      child: ChangeNotifierProvider(
+        create: (context) => currentPage,
+        child: (_pages.isEmpty || _user == null)
+            ? const Center(
+          child: CircularProgressIndicator(),
+        )
+            : Scaffold(
+          body: Consumer<CurrentPage>(
+            builder: (context, currentPage, child) {
+              return currentPage.currentPage!;
+            },
+          ),
+          appBar: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_pages[_selectedIndex]['title']),
+                if (_user != null)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.local_fire_department,
+                      ),
+                      Text('${_user!.streak}',
+                          style: const TextStyle(fontSize: 16)),
+                      const SizedBox(width: 16),
+                      const Icon(
+                        Icons.star,
+                      ),
+                      Text('${_user!.points}',
+                          style: const TextStyle(fontSize: 16)),
+                    ],
+                  ),
+              ],
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              items: _pages.map((page) {
-                return BottomNavigationBarItem(
-                  icon: Icon(page['icon']),
-                  label: page['title'],
-                );
-              }).toList(),
-              currentIndex: _selectedIndex,
-              selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
-              onTap: _onItemTapped,
-            ),
-          );
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: _pages.map((page) {
+              return BottomNavigationBarItem(
+                icon: Icon(page['icon']),
+                label: page['title'],
+              );
+            }).toList(),
+            currentIndex: _selectedIndex,
+            selectedItemColor:
+            Theme.of(context).colorScheme.inversePrimary,
+            onTap: _onItemTapped,
+          ),
+        ),
+      ),
+    );
   }
 }
