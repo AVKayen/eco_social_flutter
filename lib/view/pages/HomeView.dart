@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bson/bson.dart';
 
-import '../../components/ActivityWidget.dart';
-import '../model/Activity.dart';
-import '../repository/ActivityRepository.dart';
+import '/components/ActivityWidget.dart';
+import '/model/Activity.dart';
+import '/repository/ActivityRepository.dart';
 
 final _activityRepository = TemplateActivityRepository();
 
@@ -19,8 +19,9 @@ class _HomeViewState extends State<HomeView> {
   late List<Activity> _activities = [];
 
   void _getActivites() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
+    final String? token = await asyncPrefs.getString('token');
     if (token == null || token.isEmpty) {
       throw Exception('Token not found');
     }

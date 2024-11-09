@@ -4,9 +4,9 @@ import '../model/User.dart';
 import '../service/Request.dart';
 
 abstract class UserRepository {
-  Future<User> getUser({required ObjectId id});
+  Future<User?> getUser({required ObjectId id});
 
-  Future<User> getUserByToken({required String token});
+  Future<User?> getUserByToken({required String token});
 
   Future<User> createUser({required UserForm user});
 
@@ -39,6 +39,7 @@ class TemplateUserRepository implements UserRepository {
       username: 'user1',
       streak: 1,
       points: 1,
+      picture: 'https://picsum.photos/200',
       activities: [
         ObjectId.fromHexString('672748edb356bb7d062c5b24'),
         ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
@@ -52,6 +53,7 @@ class TemplateUserRepository implements UserRepository {
       username: 'user1',
       streak: 1,
       points: 41,
+      picture: 'https://picsum.photos/200',
       activities: [
         ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
         ObjectId.fromHexString('672748e315d90bf94058fb04'),
@@ -96,12 +98,12 @@ class TemplateUserRepository implements UserRepository {
   ];
 
   @override
-  Future<User> getUser({required ObjectId id}) async {
+  Future<User?> getUser({required ObjectId id}) async {
     return _users.firstWhere((user) => user.id == id);
   }
 
   @override
-  Future<User> getUserByToken({required String token}) async {
+  Future<User?> getUserByToken({required String token}) async {
     return _users
         .firstWhere((user) => user.id == ObjectId.fromHexString(token));
   }

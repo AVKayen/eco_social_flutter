@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'MainView.dart';
+import 'view/MainView.dart';
 
 import 'repository/AuthRepository.dart';
 
@@ -38,18 +38,24 @@ class App extends StatefulWidget {
 }
 
 class _App extends State<App> {
+  bool _isLoggedIn = false;
+
   void setDefaultPrefs() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', '672748e315d90bf94058fb04');
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
+    await asyncPrefs.setString('token', '672748e315d90bf94058fb04');
   }
 
-  void _check_login() async {
-    setDefaultPrefs();
+  void _checkToken() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
+    final String? token = await asyncPrefs.getString('token');
 
-    if (token != null && token.isNotEmpty) {
+    setState(() {
+      _isLoggedIn = (token != null && token.isNotEmpty);
+    });
+
+    if (_isLoggedIn && mounted) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const MainView()),
@@ -60,15 +66,24 @@ class _App extends State<App> {
   @override
   void initState() {
     super.initState();
-    _check_login();
+    _checkToken();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
-      ),
+          child: TextButton(
+        onPressed: () {
+          setDefaultPrefs();
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MainView()),
+          );
+        },
+        child: const Text('Login'),
+      )),
     );
   }
 }

@@ -3,38 +3,45 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bson/bson.dart';
 
 import '../../components/ProfileWidget.dart';
-import '../model/User.dart';
-import '../repository/UserRepository.dart';
-import '../../components/ActivityWidget.dart';
-import '../model/Activity.dart';
-import '../repository/ActivityRepository.dart';
+import '/model/User.dart';
+import '/repository/UserRepository.dart';
+import '/components/ActivityWidget.dart';
+import '/model/Activity.dart';
+import '/repository/ActivityRepository.dart';
 
 final _userRepository = TemplateUserRepository();
 final _activityRepository = TemplateActivityRepository();
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+  final User user;
+  final ObjectId? profileId;
+
+  const ProfileView({super.key, required this.user, this.profileId});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  User? _user;
+  User? _profile;
   final List<Activity> _activities = [];
 
-  void _getCurrentUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
-    if (token == null || token.isEmpty) {
-      throw Exception('Token not found');
+  void _getProfile() async {
+    if (widget.profileId != null) {
+      final User? profile =
+          await _userRepository.getUser(id: widget.profileId!);
+      if (profile == null) {
+        throw Exception('User not found');
+      }
+      setState(() {
+        _profile = profile;
+      });
+    } else {
+      setState(() {
+        _profile = widget.user;
+      });
     }
-    final User user = await _userRepository.getUserByToken(token: token);
-    setState(() {
-      _user = user;
-    });
-
-    for (final ObjectId activityId in user.activities) {
+    for (final ObjectId activityId in _profile!.activities) {
       final Activity? activity =
           await _activityRepository.getActivity(id: activityId);
       if (activity != null) {
@@ -48,18 +55,18 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    _getCurrentUser();
+    _getProfile();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _user == null
+    return _profile == null
         ? const Center(
             child: CircularProgressIndicator(),
           )
         : Column(
             children: [
-              ProfileWidget(user: _user!),
+              ProfileWidget(user: _profile!),
               Expanded(
                 child: ListView.builder(
                   itemCount: _activities.length,

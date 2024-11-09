@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'view/HomeView.dart';
-import 'view/ProfileView.dart';
-import 'model/User.dart';
-import 'repository/UserRepository.dart';
+import 'pages/HomeView.dart';
+import 'pages/ProfileView.dart';
+import '../model/User.dart';
+import '../repository/UserRepository.dart';
 
 final _userRepository = TemplateUserRepository();
 
@@ -17,26 +17,31 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
-  late User _user;
-  bool _isUserLoaded = false;
-
-  static const List<Map<String, dynamic>> _pages = [
-    {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
-    {'title': 'Post', 'icon': Icons.add_box},
-    {'title': 'Profile', 'body': ProfileView(), 'icon': Icons.person},
-  ];
+  late User? _user;
+  late List<Map<String, dynamic>> _pages = [];
 
   void _getCurrentUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? token = prefs.getString('token');
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+
+    final String? token = await asyncPrefs.getString('token');
     if (token == null || token.isEmpty) {
       throw Exception('Token not found');
     }
-    final User user = await _userRepository.getUserByToken(token: token);
+    final User? user = await _userRepository.getUserByToken(token: token);
+    if (user == null) {
+      throw Exception('User not found');
+    }
     setState(() {
       _user = user;
-      _isUserLoaded = true;
-      print("User loaded: $_user");
+      _pages = [
+        const {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
+        const {'title': 'Post', 'icon': Icons.add_box},
+        {
+          'title': 'Profile',
+          'body': ProfileView(user: _user!, profileId: null),
+          'icon': Icons.person
+        },
+      ];
     });
   }
 
@@ -106,39 +111,48 @@ class _MainViewState extends State<MainView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex]['body'],
-      appBar: AppBar(
-        title: Row(
-          // TODO: Change text to Icons and add a progress to next level bar
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(_pages[_selectedIndex]['title']),
-            if (_isUserLoaded)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+    return (_pages == [] || _user == null)
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            body: _pages[_selectedIndex]['body'],
+            appBar: AppBar(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Streak: ${_user.streak}',
-                      style: const TextStyle(fontSize: 16)),
-                  const SizedBox(width: 16),
-                  Text('Points: ${_user.points}',
-                      style: const TextStyle(fontSize: 16)),
+                  Text(_pages[_selectedIndex]['title']),
+                  if (_user != null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.local_fire_department,
+                        ),
+                        Text('${_user!.streak}',
+                            style: const TextStyle(fontSize: 16)),
+                        const SizedBox(width: 16),
+                        const Icon(
+                          Icons.star,
+                        ),
+                        Text('${_user!.points}',
+                            style: const TextStyle(fontSize: 16)),
+                      ],
+                    ),
                 ],
               ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: _pages.map((page) {
-          return BottomNavigationBarItem(
-            icon: Icon(page['icon']),
-            label: page['title'],
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: _pages.map((page) {
+                return BottomNavigationBarItem(
+                  icon: Icon(page['icon']),
+                  label: page['title'],
+                );
+              }).toList(),
+              currentIndex: _selectedIndex,
+              selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
+              onTap: _onItemTapped,
+            ),
           );
-        }).toList(),
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
-        onTap: _onItemTapped,
-      ),
-    );
   }
 }

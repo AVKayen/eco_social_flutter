@@ -29,7 +29,7 @@ class TemplateActivityRepository implements ActivityRepository {
       points: 1,
       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I picked up trash in the park',
-      images: ['https://example.com/image.jpg'],
+      images: ['https://picsum.photos/200'],
     ),
     Activity(
       id: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
@@ -39,7 +39,7 @@ class TemplateActivityRepository implements ActivityRepository {
       points: 1,
       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I planted a tree in my garden',
-      images: ['https://example.com/image.jpg'],
+      images: ['https://picsum.photos/200'],
     ),
     Activity(
       id: ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
@@ -49,7 +49,7 @@ class TemplateActivityRepository implements ActivityRepository {
       points: 1,
       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I bought local produce from the market',
-      images: ['https://example.com/image.jpg'],
+      images: ['https://picsum.photos/200'],
     ),
     Activity(
       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
@@ -59,7 +59,7 @@ class TemplateActivityRepository implements ActivityRepository {
       points: 1,
       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
       caption: 'I reduced my water usage by taking shorter showers',
-      images: ['https://example.com/image.jpg'],
+      images: ['https://picsum.photos/200'],
     ),
   ];
 
