@@ -38,6 +38,7 @@ dependencies:
   bson: ^5.0.5
   http: ^1.2.2
   shared_preferences: ^2.3.2
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
