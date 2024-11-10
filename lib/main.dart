@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 import 'view/MainView.dart';
 
+import 'controller/CurrentUser.dart';
 import 'repository/AuthRepository.dart';
+import 'model/User.dart';
 
 final AuthRepository _authRepository = TemplateAuthRepository();
 
@@ -16,16 +19,21 @@ class EcoSocial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Eco Social App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CurrentUser()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Eco Social App',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          primarySwatch: Colors.green,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          useMaterial3: true,
+        ),
+        home: const App(),
       ),
-      home: const App(),
     );
   }
 }
@@ -38,8 +46,10 @@ class App extends StatefulWidget {
 }
 
 class _App extends State<App> {
-  bool _isLoggedIn = false;
+  User? _user;
+  CurrentUser currentUser = CurrentUser();
 
+  //TEMPORARY
   void setDefaultPrefs() async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
@@ -47,15 +57,9 @@ class _App extends State<App> {
   }
 
   void _checkToken() async {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-
-    final String? token = await asyncPrefs.getString('token');
-
-    setState(() {
-      _isLoggedIn = (token != null && token.isNotEmpty);
-    });
-
-    if (_isLoggedIn && mounted) {
+    currentUser.loadFromStorage();
+    _user = currentUser.user;
+    if (_user != null && mounted) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const MainView()),
@@ -64,26 +68,21 @@ class _App extends State<App> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _checkToken();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: TextButton(
-        onPressed: () {
-          setDefaultPrefs();
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MainView()),
-          );
-        },
-        child: const Text('Login'),
-      )),
+        child: TextButton(
+          onPressed: () {
+            setDefaultPrefs();
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MainView()),
+            );
+          },
+          child: const Text('Login'),
+        ),
+      ),
     );
   }
 }

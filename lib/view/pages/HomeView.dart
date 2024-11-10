@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bson/bson.dart';
+import 'package:provider/provider.dart';
+
+import '/controller/CurrentUser.dart';
+
+import '/repository/ActivityRepository.dart';
+
+import '/model/Activity.dart';
+import '/model/User.dart';
 
 import '/components/ActivityWidget.dart';
-import '/model/Activity.dart';
-import '/repository/ActivityRepository.dart';
 
 final _activityRepository = TemplateActivityRepository();
 
@@ -19,14 +25,13 @@ class _HomeViewState extends State<HomeView> {
   late List<Activity> _activities = [];
 
   void _getActivites() async {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-
-    final String? token = await asyncPrefs.getString('token');
-    if (token == null || token.isEmpty) {
-      throw Exception('Token not found');
+    final User? user = Provider.of<CurrentUser>(context, listen: false).user;
+    if (user == null) {
+      throw Exception('User not found');
     }
-    final List<Activity> activities = await _activityRepository
-        .getUserActivities(userId: ObjectId.fromHexString(token));
+
+    final List<Activity> activities =
+        await _activityRepository.getFriendsActivities(userId: user.id);
     setState(() {
       _activities = activities;
     });
@@ -35,6 +40,12 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    _getActivites();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _getActivites();
   }
 

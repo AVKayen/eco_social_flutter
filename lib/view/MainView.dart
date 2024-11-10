@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
-import '../controller/CurrentPage.dart';
-import './pages/HomeView.dart';
-import 'pages/ProfileView.dart';
-import '../model/User.dart';
-import '../repository/UserRepository.dart';
+import '/controller/CurrentPage.dart';
+import '/controller/CurrentUser.dart';
 
-final _userRepository = TemplateUserRepository();
+import '/model/User.dart';
+
+import '/view/pages/HomeView.dart';
+import '/view/pages/ProfileView.dart';
 
 class MainView extends StatefulWidget {
   const MainView({
@@ -23,28 +22,22 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   int _selectedIndex = 0;
   final currentPage = CurrentPage();
-  late User? _user;
+  late User _user;
+
   late List<Map<String, dynamic>> _pages = [];
 
-  void _getCurrentUser() async {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+  void _loadPages() async {
+    final currentUser = Provider.of<CurrentUser>(context, listen: false);
+    await currentUser.loadFromStorage();
+    _user = currentUser.user!;
 
-    final String? token = await asyncPrefs.getString('token');
-    if (token == null || token.isEmpty) {
-      throw Exception('Token not found');
-    }
-    final User? user = await _userRepository.getUserByToken(token: token);
-    if (user == null) {
-      throw Exception('User not found');
-    }
     setState(() {
-      _user = user;
       _pages = [
         const {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
         const {'title': 'Post', 'icon': Icons.add_box},
         {
           'title': 'Profile',
-          'body': ProfileView(profileId: _user!.id),
+          'body': ProfileView(profileId: _user.id),
           'icon': Icons.person
         },
       ];
@@ -55,7 +48,7 @@ class _MainViewState extends State<MainView> {
   void initState() {
     super.initState();
     currentPage.setCurrentPage(const HomeView());
-    _getCurrentUser();
+    _loadPages();
   }
 
   void _onItemTapped(int index) {
@@ -128,54 +121,53 @@ class _MainViewState extends State<MainView> {
       },
       child: ChangeNotifierProvider(
         create: (context) => currentPage,
-        child: (_pages.isEmpty || _user == null)
+        child: (_pages.isEmpty)
             ? const Center(
-          child: CircularProgressIndicator(),
-        )
+                child: CircularProgressIndicator(),
+              )
             : Scaffold(
-          body: Consumer<CurrentPage>(
-            builder: (context, currentPage, child) {
-              return currentPage.currentPage!;
-            },
-          ),
-          appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_pages[_selectedIndex]['title']),
-                if (_user != null)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                body: Consumer<CurrentPage>(
+                  builder: (context, currentPage, child) {
+                    return currentPage.currentPage!;
+                  },
+                ),
+                appBar: AppBar(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(
-                        Icons.local_fire_department,
+                      Text(_pages[_selectedIndex]['title']),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.local_fire_department,
+                          ),
+                          Text('${_user!.streak}',
+                              style: const TextStyle(fontSize: 16)),
+                          const SizedBox(width: 16),
+                          const Icon(
+                            Icons.star,
+                          ),
+                          Text('${_user!.points}',
+                              style: const TextStyle(fontSize: 16)),
+                        ],
                       ),
-                      Text('${_user!.streak}',
-                          style: const TextStyle(fontSize: 16)),
-                      const SizedBox(width: 16),
-                      const Icon(
-                        Icons.star,
-                      ),
-                      Text('${_user!.points}',
-                          style: const TextStyle(fontSize: 16)),
                     ],
                   ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: _pages.map((page) {
-              return BottomNavigationBarItem(
-                icon: Icon(page['icon']),
-                label: page['title'],
-              );
-            }).toList(),
-            currentIndex: _selectedIndex,
-            selectedItemColor:
-            Theme.of(context).colorScheme.inversePrimary,
-            onTap: _onItemTapped,
-          ),
-        ),
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  items: _pages.map((page) {
+                    return BottomNavigationBarItem(
+                      icon: Icon(page['icon']),
+                      label: page['title'],
+                    );
+                  }).toList(),
+                  currentIndex: _selectedIndex,
+                  selectedItemColor:
+                      Theme.of(context).colorScheme.inversePrimary,
+                  onTap: _onItemTapped,
+                ),
+              ),
       ),
     );
   }

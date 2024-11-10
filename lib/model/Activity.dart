@@ -81,7 +81,7 @@ class Activity {
   final int streak;
   final int points;
   final String? caption;
-  final List<String>? images;
+  final List<String> images;
 
   Activity({
     required this.id,
@@ -91,7 +91,7 @@ class Activity {
     required this.streak,
     required this.points,
     this.caption,
-    this.images,
+    required this.images,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
@@ -103,9 +103,7 @@ class Activity {
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
       caption: json[_JsonKeys.caption],
-      images: json[_JsonKeys.images] != null
-          ? List<String>.from(json[_JsonKeys.images])
-          : null,
+      images: List<String>.from(json[_JsonKeys.images]),
     );
   }
 

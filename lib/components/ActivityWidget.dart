@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../controller/CurrentPage.dart';
-import '../model/Activity.dart';
+import '/controller/CurrentPage.dart';
 
-import '../view/pages/ProfileView.dart';
+import '/model/Activity.dart';
 
 class ActivityWidget extends StatelessWidget {
   final Activity activity;
+  final bool linkToProfile;
+  final bool showProfile;
+  final bool linkToActivity;
 
-  const ActivityWidget({super.key, required this.activity});
-
-  void redirectToProfile(BuildContext context, CurrentPage currentPage) {
-    currentPage.setCurrentPage(ProfileView(profileId: activity.userId));
-  }
-
+  const ActivityWidget(
+      {super.key,
+      required this.activity,
+      this.linkToProfile = true,
+      this.showProfile = true,
+      this.linkToActivity = true});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class ActivityWidget extends StatelessWidget {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width - 40,
+                maxWidth: MediaQuery.of(context).size.width - 104,
               ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,27 +37,36 @@ class ActivityWidget extends StatelessWidget {
                     Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              redirectToProfile(context, currentPage);
-                            },
-                            style: ButtonStyle(
-                              overlayColor: WidgetStatePropertyAll(
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .secondary
-                                      .withOpacity(0.1)),
-                            ),
-                            child: Text(
-                              activity.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
+                          (linkToActivity)
+                              ? TextButton(
+                                  onPressed: () {
+                                    currentPage.redirectToActivity(activity.id);
+                                  },
+                                  style: ButtonStyle(
+                                    overlayColor: WidgetStatePropertyAll(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .withOpacity(0.1)),
+                                  ),
+                                  child: Text(
+                                    activity.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  activity.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
                           const Icon(
                             Icons.local_fire_department,
                             size: 20,
@@ -70,28 +81,37 @@ class ActivityWidget extends StatelessWidget {
                           Text('${activity.points}',
                               style: const TextStyle(fontSize: 15)),
                         ]),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            redirectToProfile(context, currentPage);
-                          },
-                          child: Text('${activity.userId}',
-                              style: const TextStyle(
+                    (showProfile)
+                        ? (linkToProfile)
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      currentPage
+                                          .redirectToProfile(activity.userId);
+                                    },
+                                    child: Text('${activity.userId}',
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            overflow: TextOverflow.ellipsis,
+                                            decoration:
+                                                TextDecoration.underline)),
+                                  ),
+                                ],
+                              )
+                            : Text('${activity.userId}',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   overflow: TextOverflow.ellipsis,
-                                  decoration: TextDecoration.underline)),
-                        ),
-                      ],
-                    ),
+                                ))
+                        : const SizedBox(),
                     Text(activity.activityName,
                         overflow: TextOverflow.fade,
                         style: const TextStyle(fontSize: 15)),
                     const SizedBox(
                       height: 10,
                     ),
-
                     (activity.caption != "" || activity.caption != null)
                         ? Text(activity.caption!,
                             overflow: TextOverflow.fade,

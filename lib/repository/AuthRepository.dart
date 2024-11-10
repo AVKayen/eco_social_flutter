@@ -2,16 +2,26 @@ import 'package:bson/bson.dart';
 
 import '../model/User.dart';
 import '../service/Request.dart';
+import 'UserRepository.dart';
+
+//TEMPORARY
+UserRepository _userRepository = TemplateUserRepository();
 
 abstract class AuthRepository {
+  Future<User?> getUserByToken({required String token});
+
   Future<Token?> login({required UserForm user});
 
   Future<Token?> register({required UserForm user});
-
-  Future<User> logout({required ObjectId id});
 }
 
 class TemplateAuthRepository implements AuthRepository {
+  @override
+  Future<User?> getUserByToken({required String token}) async {
+    //TEMPORARY
+    return _userRepository.getUserByToken(token: token);
+  }
+
   @override
   Future<Token?> login({required UserForm user}) async {
     final Token token = Token(
@@ -25,10 +35,5 @@ class TemplateAuthRepository implements AuthRepository {
   @override
   Future<Token?> register({required UserForm user}) async {
     return login(user: user);
-  }
-
-  @override
-  Future<User> logout({required ObjectId id}) async {
-    throw UnimplementedError();
   }
 }
