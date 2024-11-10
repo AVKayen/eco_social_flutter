@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
-import 'view/MainView.dart';
-
 import 'controller/CurrentUser.dart';
 import 'repository/AuthRepository.dart';
 import 'model/User.dart';
+
+import 'view/MainView.dart';
+import 'components/LoginForm.dart';
+import 'components/SignupForm.dart';
 
 final AuthRepository _authRepository = TemplateAuthRepository();
 
@@ -46,41 +48,37 @@ class App extends StatefulWidget {
 }
 
 class _App extends State<App> {
-  User? _user;
-  CurrentUser currentUser = CurrentUser();
-
   //TEMPORARY
-  void setDefaultPrefs() async {
-    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-
-    await asyncPrefs.setString('token', '672748e315d90bf94058fb04');
-  }
-
-  void _checkToken() async {
-    currentUser.loadFromStorage();
-    _user = currentUser.user;
-    if (_user != null && mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const MainView()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: TextButton(
-          onPressed: () {
-            setDefaultPrefs();
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MainView()),
-            );
-          },
-          child: const Text('Login'),
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const LoginForm();
+                  },
+                );
+              },
+              child: const Text('Login'),
+            ),
+            TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const SignupForm();
+                  },
+                );
+              },
+              child: const Text('Sign Up'),
+            ),
+          ],
         ),
       ),
     );

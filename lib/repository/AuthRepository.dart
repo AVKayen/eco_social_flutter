@@ -12,7 +12,7 @@ abstract class AuthRepository {
 
   Future<Token?> login({required UserForm user});
 
-  Future<Token?> register({required UserForm user});
+  Future<Token?> register({required RegisterForm user});
 }
 
 class TemplateAuthRepository implements AuthRepository {
@@ -28,12 +28,16 @@ class TemplateAuthRepository implements AuthRepository {
       token: '672748d470e4e2a12d6cd21b',
       tokenType: 'Bearer',
     );
-
     return token;
   }
 
   @override
-  Future<Token?> register({required UserForm user}) async {
-    return login(user: user);
+  Future<Token?> register({required RegisterForm user}) async {
+    return login(
+      user: UserForm(
+        username: user.username,
+        password: user.password,
+      ),
+    );
   }
 }

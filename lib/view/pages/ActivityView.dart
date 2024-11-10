@@ -86,9 +86,12 @@ class _ActivityViewState extends State<ActivityView> {
           : Container(
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: [
+                  ActivityWidget(
+                      activity: _activity!,
+                      linkToProfile: !_isCreator!,
+                      linkToActivity: false),
                   GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -99,13 +102,24 @@ class _ActivityViewState extends State<ActivityView> {
                     itemCount: _activity!.images.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return Image.network(_activity!.images[index]);
+                      return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: InteractiveViewer(
+                                  child:
+                                      Image.network(_activity!.images[index]),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Image.network(_activity!.images[index]),
+                      );
                     },
                   ),
-                  ActivityWidget(
-                      activity: _activity!,
-                      linkToProfile: !_isCreator!,
-                      linkToActivity: false),
                 ],
               ),
             );

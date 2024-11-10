@@ -43,6 +43,8 @@ class ActivityWidget extends StatelessWidget {
                                     currentPage.redirectToActivity(activity.id);
                                   },
                                   style: ButtonStyle(
+                                    padding: const WidgetStatePropertyAll(
+                                        EdgeInsets.all(0)),
                                     overlayColor: WidgetStatePropertyAll(
                                         Theme.of(context)
                                             .colorScheme
@@ -67,6 +69,7 @@ class ActivityWidget extends StatelessWidget {
                                     fontSize: 20,
                                   ),
                                 ),
+                          const SizedBox(width: 8),
                           const Icon(
                             Icons.local_fire_department,
                             size: 20,
@@ -83,22 +86,25 @@ class ActivityWidget extends StatelessWidget {
                         ]),
                     (showProfile)
                         ? (linkToProfile)
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      currentPage
-                                          .redirectToProfile(activity.userId);
-                                    },
-                                    child: Text('${activity.userId}',
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            overflow: TextOverflow.ellipsis,
-                                            decoration:
-                                                TextDecoration.underline)),
-                                  ),
-                                ],
+                            ? TextButton(
+                                style: ButtonStyle(
+                                  padding: const WidgetStatePropertyAll(
+                                      EdgeInsets.all(0)),
+                                  overlayColor: WidgetStatePropertyAll(
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .secondary
+                                          .withOpacity(0.1)),
+                                ),
+                                onPressed: () {
+                                  currentPage
+                                      .redirectToProfile(activity.userId);
+                                },
+                                child: Text('${activity.userId}',
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        overflow: TextOverflow.ellipsis,
+                                        decoration: TextDecoration.underline)),
                               )
                             : Text('${activity.userId}',
                                 style: const TextStyle(

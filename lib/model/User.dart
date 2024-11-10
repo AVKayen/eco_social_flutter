@@ -1,4 +1,5 @@
 import 'package:bson/bson.dart';
+import 'package:image_input/image_input.dart';
 
 Function calculateLevel = (int points) {
   return points ~/ 100;
@@ -45,6 +46,32 @@ class UserForm {
     return UserForm(
       username: json[_JsonKeys.username],
       password: json[_JsonKeys.password],
+    );
+  }
+}
+
+class RegisterForm extends UserForm {
+  final XFile picture;
+
+  RegisterForm({
+    required super.username,
+    required super.password,
+    required this.picture,
+  });
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      ...super.toJson(),
+      _JsonKeys.picture: picture,
+    };
+  }
+
+  factory RegisterForm.fromJson(Map<String, dynamic> json) {
+    return RegisterForm(
+      username: json[_JsonKeys.username],
+      password: json[_JsonKeys.password],
+      picture: json[_JsonKeys.picture],
     );
   }
 }

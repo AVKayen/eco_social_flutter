@@ -21,15 +21,15 @@ class CurrentUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(UserForm form) async {
-    _authRepository.login(user: form).then((Token? token) async {
+  Future<bool> login(UserForm form) async {
+    try {
+      final Token? token = await _authRepository.login(user: form);
       if (token == null) {
         throw Exception('Token not found');
       }
 
       final User? user =
           await _authRepository.getUserByToken(token: token.token);
-
       if (user == null) {
         throw Exception('User not found');
       }
@@ -39,8 +39,34 @@ class CurrentUser extends ChangeNotifier {
       final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
       await asyncPrefs.setString('token', token.token);
       notifyListeners();
-      return token;
-    });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> register(RegisterForm form) async {
+    try {
+      final Token? token = await _authRepository.register(user: form);
+      if (token == null) {
+        throw Exception('Token not found');
+      }
+
+      final User? user =
+          await _authRepository.getUserByToken(token: token.token);
+      if (user == null) {
+        throw Exception('User not found');
+      }
+
+      _user = user;
+
+      final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+      await asyncPrefs.setString('token', token.token);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> loadFromStorage() async {
