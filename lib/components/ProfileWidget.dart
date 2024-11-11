@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/User.dart';
 
 class ProfileWidget extends StatelessWidget {
-  final User user;
+  final PublicProfile user;
 
   const ProfileWidget({super.key, required this.user});
 
@@ -20,7 +20,7 @@ class ProfileWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          (user.picture != null && user.picture != "")
+          (true || user.picture != null && user.picture != "")
               ? AspectRatio(
                   aspectRatio: 1,
                   child: Container(
@@ -52,12 +52,12 @@ class ProfileWidget extends StatelessWidget {
             ]),
             Row(children: [
               const Icon(Icons.star, size: 20),
-              Text((user.points / 10).toString(),
+              Text((user.level).toString(),
                   style: const TextStyle(fontSize: 15)),
             ]),
             Row(children: [
               const Icon(Icons.person, size: 20),
-              Text((user.friends.length).toString(),
+              Text((user.friendCount).toString(),
                   style: const TextStyle(fontSize: 15)),
             ])
           ]),

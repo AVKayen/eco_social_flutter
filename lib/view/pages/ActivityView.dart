@@ -13,8 +13,8 @@ import '/model/Activity.dart';
 
 import '/components/ActivityWidget.dart';
 
-final _userRepository = TemplateUserRepository();
-final _activityRepository = TemplateActivityRepository();
+final _userRepository = HttpUserRepository();
+final _activityRepository = HttpActivityRepository();
 
 class ActivityView extends StatefulWidget {
   final ObjectId activityId;
@@ -30,23 +30,17 @@ class _ActivityViewState extends State<ActivityView> {
   bool? _isCreator;
 
   void _getActivity() async {
-    late User? user;
-    final Activity? activity =
-        await _activityRepository.getActivity(id: widget.activityId);
+    late CurrentUser? user;
+
+    user = Provider.of<CurrentUser>(context, listen: false);
+
+    final Activity? activity = await _activityRepository.getActivity(
+        id: widget.activityId, token: user.token!);
     if (activity == null) {
       throw Exception('Activity not found');
     }
 
-    if (!mounted) {
-      throw Exception('Widget not mounted, what?');
-    }
-    user = Provider.of<CurrentUser>(context, listen: false).user;
-
-    if (user == null) {
-      throw Exception('User not found');
-    }
-
-    if (user.id == activity.userId) {
+    if (user.user!.id == activity.userId) {
       setState(() {
         _isCreator = true;
       });

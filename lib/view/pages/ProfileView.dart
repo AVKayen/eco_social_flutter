@@ -13,8 +13,8 @@ import '/model/Activity.dart';
 import '/components/ProfileWidget.dart';
 import '/components/ActivityWidget.dart';
 
-final _userRepository = TemplateUserRepository();
-final _activityRepository = TemplateActivityRepository();
+final _userRepository = HttpUserRepository();
+final _activityRepository = HttpActivityRepository();
 
 class ProfileView extends StatefulWidget {
   final ObjectId? profileId;
@@ -26,16 +26,19 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  User? _profile;
+  dynamic _profile;
   final List<Activity> _activities = [];
 
   void _getProfile() async {
-    late User? profile;
+    final CurrentUser currentUser =
+        Provider.of<CurrentUser>(context, listen: false);
+    late dynamic profile;
 
     if (widget.profileId == null) {
-      profile = Provider.of<CurrentUser>(context, listen: false).user;
+      profile = currentUser.user!.toPrivateProfile();
     } else {
-      profile = await _userRepository.getUser(id: widget.profileId!);
+      profile = await _userRepository.getUserProfile(
+          id: widget.profileId!, token: currentUser.token!);
     }
 
     if (profile == null) {
@@ -45,14 +48,15 @@ class _ProfileViewState extends State<ProfileView> {
     setState(() {
       _profile = profile!;
     });
-
-    for (final ObjectId activityId in _profile!.activities) {
-      final Activity? activity =
-          await _activityRepository.getActivity(id: activityId);
-      if (activity != null) {
-        setState(() {
-          _activities.add(activity);
-        });
+    if (_profile.runtimeType == PrivateProfile) {
+      for (final ObjectId activityId in _profile!.activities) {
+        final Activity? activity = await _activityRepository.getActivity(
+            id: activityId, token: currentUser.token!);
+        if (activity != null) {
+          setState(() {
+            _activities.add(activity);
+          });
+        }
       }
     }
   }
@@ -88,7 +92,7 @@ class _ProfileViewState extends State<ProfileView> {
                     final Activity activity = _activities[index];
                     return Column(
                       children: [
-                        ActivityWidget(activity: activity),
+                        ActivityWidget(activity: activity, showProfile: false),
                         const Divider(
                           height: 0,
                           indent: 16,

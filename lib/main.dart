@@ -3,14 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
 import 'controller/CurrentUser.dart';
-import 'repository/AuthRepository.dart';
 import 'model/User.dart';
 
 import 'view/MainView.dart';
 import 'components/LoginForm.dart';
 import 'components/SignupForm.dart';
-
-final AuthRepository _authRepository = TemplateAuthRepository();
 
 void main() {
   runApp(const EcoSocial());

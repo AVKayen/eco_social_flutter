@@ -35,11 +35,7 @@ class _MainViewState extends State<MainView> {
       _pages = [
         const {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
         const {'title': 'Post', 'icon': Icons.add_box},
-        {
-          'title': 'Profile',
-          'body': ProfileView(profileId: _user.id),
-          'icon': Icons.person
-        },
+        {'title': 'Profile', 'body': ProfileView(), 'icon': Icons.person},
       ];
     });
   }
@@ -142,13 +138,13 @@ class _MainViewState extends State<MainView> {
                           const Icon(
                             Icons.local_fire_department,
                           ),
-                          Text('${_user!.streak}',
+                          Text('${_user.streak}',
                               style: const TextStyle(fontSize: 16)),
                           const SizedBox(width: 16),
                           const Icon(
                             Icons.star,
                           ),
-                          Text('${_user!.points}',
+                          Text('${_user.points}',
                               style: const TextStyle(fontSize: 16)),
                         ],
                       ),

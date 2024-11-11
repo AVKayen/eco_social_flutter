@@ -12,7 +12,7 @@ import '/model/User.dart';
 
 import '/components/ActivityWidget.dart';
 
-final _activityRepository = TemplateActivityRepository();
+final _activityRepository = HttpActivityRepository();
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -25,13 +25,10 @@ class _HomeViewState extends State<HomeView> {
   late List<Activity> _activities = [];
 
   void _getActivites() async {
-    final User? user = Provider.of<CurrentUser>(context, listen: false).user;
-    if (user == null) {
-      throw Exception('User not found');
-    }
+    final CurrentUser user = Provider.of<CurrentUser>(context, listen: false);
 
     final List<Activity> activities =
-        await _activityRepository.getFriendsActivities(userId: user.id);
+        await _activityRepository.getFriendsActivities(token: user.token!);
     setState(() {
       _activities = activities;
     });
