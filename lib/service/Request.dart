@@ -5,7 +5,7 @@ typedef Response = http.Response;
 // each method takes a path and an optional token and returns an http.Response
 // post and put methods also take a body json-like map
 class Request {
-  static const String API = 'http://localhost:8000';
+  static const String baseUrl = 'http://localhost:8000';
 
   static Future<http.Response> _sendRequest(
       Future<http.Response> Function() request) async {
@@ -32,7 +32,7 @@ class Request {
   static Future<http.Response> get(String path,
       {String? token, Map<String, String>? headers}) async {
     return _sendRequest(() => http.get(
-          Uri.parse('$API$path'),
+          Uri.parse('$baseUrl$path'),
           headers: _createHeaders(token: token, predefHeaders: headers),
         ));
   }
@@ -44,7 +44,7 @@ class Request {
     Map<String, String>? headers,
   }) async {
     return _sendRequest(() => http.post(
-          Uri.parse('$API$path'),
+          Uri.parse('$baseUrl$path'),
           headers: _createHeaders(token: token, predefHeaders: headers),
           body: body,
         ));
@@ -53,7 +53,7 @@ class Request {
   static Future<http.Response> put(String path, Map<String, dynamic> body,
       {String? token, Map<String, String>? headers}) async {
     return _sendRequest(() => http.put(
-          Uri.parse('$API$path'),
+          Uri.parse('$baseUrl$path'),
           headers: _createHeaders(token: token, predefHeaders: headers),
           body: body,
         ));
@@ -62,7 +62,7 @@ class Request {
   static Future<http.Response> delete(String path,
       {String? token, Map<String, String>? headers}) async {
     return _sendRequest(() => http.delete(
-          Uri.parse('$API$path'),
+          Uri.parse('$baseUrl$path'),
           headers: _createHeaders(token: token, predefHeaders: headers),
         ));
   }

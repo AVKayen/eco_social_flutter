@@ -54,6 +54,43 @@ class _ActivityViewState extends State<ActivityView> {
     });
   }
 
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete activity'),
+          content: const Text('Are you sure you want to delete this activity?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: _deleteActivity,
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteActivity() async {
+    final CurrentUser currentUser =
+        Provider.of<CurrentUser>(context, listen: false);
+
+    final CurrentPage currentPage =
+        Provider.of<CurrentPage>(context, listen: false);
+
+    await _activityRepository.deleteActivity(
+        activityId: widget.activityId, token: currentUser.token!);
+
+    currentPage.goBack();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +122,11 @@ class _ActivityViewState extends State<ActivityView> {
                       activity: _activity!,
                       linkToProfile: !_isCreator!,
                       linkToActivity: false),
+                  if (_isCreator!)
+                    ElevatedButton(
+                      onPressed: _showDeleteDialog,
+                      child: const Text('Delete activity'),
+                    ),
                   GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(

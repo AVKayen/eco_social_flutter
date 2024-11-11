@@ -1,4 +1,5 @@
 import 'package:bson/bson.dart';
+import 'package:image_input/image_input.dart';
 
 class _JsonKeys {
   static const String id = '_id';
@@ -57,7 +58,7 @@ class ActivityName {
   static const String other = 'Other';
 }
 
-Map<int, String> activityTypeName = {
+Map<int, String> activityNameFromType = {
   ActivityType.trashPicking: ActivityName.trashPicking,
   ActivityType.pubTransportInsteadOfCar: ActivityName.pubTransportInsteadOfCar,
   ActivityType.bikeInsteadOfCar: ActivityName.bikeInsteadOfCar,
@@ -73,6 +74,46 @@ Map<int, String> activityTypeName = {
   ActivityType.reduceFoodWaste: ActivityName.reduceFoodWaste,
   ActivityType.other: ActivityName.other,
 };
+
+Map<String, int> activityTypeFromName = {
+  ActivityName.trashPicking: ActivityType.trashPicking,
+  ActivityName.pubTransportInsteadOfCar: ActivityType.pubTransportInsteadOfCar,
+  ActivityName.bikeInsteadOfCar: ActivityType.bikeInsteadOfCar,
+  ActivityName.walkInsteadOfCar: ActivityType.walkInsteadOfCar,
+  ActivityName.trainInsteadOfPlane: ActivityType.trainInsteadOfPlane,
+  ActivityName.plantTree: ActivityType.plantTree,
+  ActivityName.plantOther: ActivityType.plantOther,
+  ActivityName.buyLocal: ActivityType.buyLocal,
+  ActivityName.buySecondHand: ActivityType.buySecondHand,
+  ActivityName.sellUnused: ActivityType.sellUnused,
+  ActivityName.reduceWater: ActivityType.reduceWater,
+  ActivityName.reduceEnergy: ActivityType.reduceEnergy,
+  ActivityName.reduceFoodWaste: ActivityType.reduceFoodWaste,
+  ActivityName.other: ActivityType.other,
+};
+
+class ActivityForm {
+  final int activityType;
+  final String title;
+  final String? caption;
+  final List<XFile> images;
+
+  ActivityForm({
+    required this.activityType,
+    required this.title,
+    this.caption,
+    required this.images,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      _JsonKeys.activityType: activityType,
+      _JsonKeys.title: title,
+      _JsonKeys.caption: caption,
+      _JsonKeys.images: images,
+    };
+  }
+}
 
 class Activity {
   final ObjectId id;
@@ -100,7 +141,7 @@ class Activity {
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
       id: ObjectId.fromHexString(json[_JsonKeys.id]),
-      activityName: activityTypeName[json[_JsonKeys.activityType]]!,
+      activityName: activityNameFromType[json[_JsonKeys.activityType]]!,
       title: json[_JsonKeys.title],
       userId: ObjectId.fromHexString(json[_JsonKeys.userId]),
       createdAt: DateTime.parse(json[_JsonKeys.createdAt]),
@@ -109,20 +150,5 @@ class Activity {
       caption: json[_JsonKeys.caption],
       images: List<String>.from(json[_JsonKeys.images]),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      _JsonKeys.id: id,
-      _JsonKeys.activityType: activityTypeName.entries
-          .firstWhere((entry) => entry.value == activityName)
-          .key,
-      _JsonKeys.userId: userId.oid,
-      _JsonKeys.streak: streak,
-      _JsonKeys.points: points,
-      _JsonKeys.title: title,
-      _JsonKeys.caption: caption,
-      _JsonKeys.images: images,
-    };
   }
 }

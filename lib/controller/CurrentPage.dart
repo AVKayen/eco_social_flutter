@@ -32,4 +32,9 @@ class CurrentPage extends ChangeNotifier {
     }
     return false;
   }
+
+  void refresh() {
+    Widget last = _pageStack.removeLast();
+    _pageStack.add(last);
+  }
 }

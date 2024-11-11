@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_input/image_input.dart';
 
 import '/model/User.dart';
 import '/controller/CurrentUser.dart';
 import '/view/MainView.dart';
-
-import 'package:image_input/image_input.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -40,7 +39,6 @@ class _SignupFormState extends State<SignupForm> {
                 setState(() {
                   _image = image;
                 });
-                print('Image selected: ${image.path}');
               },
             ),
             TextFormField(

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_input/image_input.dart';
 
 import '/controller/CurrentPage.dart';
 import '/controller/CurrentUser.dart';
 
+import '/repository/ActivityRepository.dart';
+
 import '/model/User.dart';
+import '/model/Activity.dart';
 
 import '/view/pages/HomeView.dart';
 import '/view/pages/ProfileView.dart';
+
+ActivityRepository _activityRepository = HttpActivityRepository();
 
 class MainView extends StatefulWidget {
   const MainView({
@@ -29,13 +35,15 @@ class _MainViewState extends State<MainView> {
   void _loadPages() async {
     final currentUser = Provider.of<CurrentUser>(context, listen: false);
     await currentUser.loadFromStorage();
-    _user = currentUser.user!;
+    setState(() {
+      _user = currentUser.user!;
+    });
 
     setState(() {
       _pages = [
         const {'title': 'Home', 'body': HomeView(), 'icon': Icons.home},
         const {'title': 'Post', 'icon': Icons.add_box},
-        {'title': 'Profile', 'body': ProfileView(), 'icon': Icons.person},
+        {'title': 'Profile', 'body': const ProfileView(), 'icon': Icons.person},
       ];
     });
   }
@@ -58,49 +66,107 @@ class _MainViewState extends State<MainView> {
     }
   }
 
-  void _showPostModalBottomSheet() {
-    TextEditingController postController = TextEditingController();
+  void _showPostModalBottomSheet() async {
+    final currentUser = Provider.of<CurrentUser>(context, listen: false);
+    TextEditingController descController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    int activityTypeSelected = ActivityType.other;
+    List<XFile> images = [];
 
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text(
-                  'Create a new post',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setLocalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      'Create a new post',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    ImageInput(
+                      images: images,
+                      allowMaxImage: 3,
+                      onImageSelected: (XFile image) {
+                        setLocalState(() {
+                          images.add(image);
+                        });
+                      },
+                      onImageRemoved: (XFile image, int index) {
+                        setLocalState(() {
+                          images.removeAt(index);
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButton<int>(
+                      value: activityTypeSelected,
+                      onChanged: (int? newValue) {
+                        setLocalState(() {
+                          activityTypeSelected = newValue!;
+                        });
+                      },
+                      items: activityTypeFromName.values.map((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(activityNameFromType[value]!),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        hintText: 'Title',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: descController,
+                      decoration: const InputDecoration(
+                        hintText: 'Description (optional)',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final newActivity = ActivityForm(
+                          title: titleController.text,
+                          caption: descController.text,
+                          activityType: activityTypeSelected,
+                          images: images,
+                        );
+                        print(newActivity);
+                        await _activityRepository.createActivity(
+                            activity: newActivity, token: currentUser.token!);
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Post submitted successfully')),
+                        );
+                        currentUser.loadFromStorage();
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: postController,
-                  decoration: const InputDecoration(
-                    hintText: 'Description (optional)',
-                    border: OutlineInputBorder(),
-                  ),
-                  maxLines: 3,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Post submitted successfully')),
-                    );
-                  },
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

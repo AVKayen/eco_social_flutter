@@ -1,5 +1,8 @@
 import 'package:bson/bson.dart';
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../model/Activity.dart';
 import '../service/Request.dart';
 
@@ -14,118 +17,16 @@ abstract class ActivityRepository {
     int limit = 10,
   });
 
-  Future<Activity?> createActivity({
-    required Activity activity,
+  Future<void> createActivity({
+    required ActivityForm activity,
+    required String token,
+  });
+
+  Future<void> deleteActivity({
+    required ObjectId activityId,
     required String token,
   });
 }
-
-// class TemplateActivityRepository implements ActivityRepository {
-//   final List<Activity> _activities = [
-//     Activity(
-//       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
-//       activityName: ActivityName.trashPicking,
-//       title: 'Picked up trash',
-//       streak: 1,
-//       points: 1,
-//       userId: ObjectId.fromHexString('672748e315d90bf94058fb04'),
-//       caption: 'I picked up trash in the park',
-//       images: [
-//         'https://picsum.photos/200',
-//         'https://picsum.photos/201',
-//         'https://picsum.photos/202',
-//         'https://picsum.photos/203',
-//         'https://picsum.photos/204',
-//         'https://picsum.photos/201',
-//         'https://picsum.photos/202',
-//         'https://picsum.photos/203',
-//         'https://picsum.photos/204',
-//         'https://picsum.photos/201',
-//         'https://picsum.photos/202',
-//         'https://picsum.photos/203',
-//         'https://picsum.photos/204',
-//       ],
-//     ),
-//     Activity(
-//       id: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
-//       activityName: ActivityName.plantTree,
-//       title: 'Planted a tree',
-//       streak: 1,
-//       points: 1,
-//       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
-//       caption: 'I planted a tree in my garden',
-//       images: ['https://picsum.photos/200'],
-//     ),
-//     Activity(
-//       id: ObjectId.fromHexString('672748d470e4e2a12d6cd21b'),
-//       activityName: ActivityName.buyLocal,
-//       title: 'Bought local',
-//       streak: 1,
-//       points: 1,
-//       userId: ObjectId.fromHexString('672748edb356bb7d062c5b24'),
-//       caption: 'I bought local produce from the market',
-//       images: ['https://picsum.photos/200'],
-//     ),
-//     Activity(
-//       id: ObjectId.fromHexString('672748e315d90bf94058fb04'),
-//       activityName: ActivityName.reduceWater,
-//       title: 'Reduced water usage',
-//       streak: 1,
-//       points: 1,
-//       userId: ObjectId.fromHexString('672748f6f64cd020b0b322d2'),
-//       caption: 'I reduced my water usage by taking shorter showers',
-//       images: ['https://picsum.photos/200'],
-//     ),
-//   ];
-
-//   @override
-//   Future<Activity?> getActivity({required ObjectId id}) async {
-//     try {
-//       final activity = _activities.firstWhere((a) => a.id == id);
-//       return activity;
-//     } catch (e) {
-//       return null;
-//     }
-//   }
-
-//   @override
-//   Future<List<Activity>> getUserActivities(
-//       {required ObjectId userId, int limit = 10}) async {
-//     return _activities;
-//   }
-
-//   @override
-//   Future<List<Activity>> getFriendsActivities(
-//       {required ObjectId userId, int limit = 10}) async {
-//     return _activities;
-//   }
-
-//   @override
-//   Future<Activity> createActivity({required Activity activity}) async {
-//     _activities.add(activity);
-//     return activity;
-//   }
-
-//   @override
-//   Future<Activity> updateActivity({required Activity activity}) async {
-//     final index = _activities.indexWhere((a) => a.id == activity.id);
-//     if (index != -1) {
-//       _activities[index] = activity;
-//     }
-//     return activity;
-//   }
-
-//   @override
-//   Future<Activity> deleteActivity({required ObjectId activityId}) async {
-//     final index = _activities.indexWhere((a) => a.id == activityId);
-//     if (index != -1) {
-//       final activity = _activities[index];
-//       _activities.removeAt(index);
-//       return activity;
-//     }
-//     throw Exception('Activity not found');
-//   }
-// }
 
 class HttpActivityRepository implements ActivityRepository {
   @override
@@ -146,12 +47,56 @@ class HttpActivityRepository implements ActivityRepository {
   }
 
   @override
-  Future<Activity?> createActivity(
-      {required Activity activity, required String token}) async {
-    final response =
-        await Request.post('/activity', activity.toJson(), token: token);
-    if (response.statusCode != 200) return null;
-    return activity;
+  Future<void> createActivity(
+      {required ActivityForm activity, required String token}) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${Request.baseUrl}/activity/'),
+    );
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Content-Type'] = 'multipart/form-data';
+    final images = activity.images;
+
+    request.fields['title'] = activity.title;
+    if (activity.caption != null) {
+      request.fields['caption'] = activity.caption!;
+    }
+    request.fields['activity_type'] = activity.activityType.toString();
+
+    for (var i = 0; i < images.length; i++) {
+      dynamic file;
+      if (images[i].mimeType == 'image/jpeg') {
+        file = http.MultipartFile.fromBytes(
+          'images',
+          await images[i].readAsBytes(),
+          contentType: MediaType.parse('image/jpeg'),
+          filename: 'image$i.jpg',
+        );
+      } else if (images[i].mimeType == 'image/png') {
+        file = http.MultipartFile.fromBytes(
+          'images',
+          await images[i].readAsBytes(),
+          contentType: MediaType.parse('image/png'),
+          filename: 'image$i.png',
+        );
+      } else {
+        throw Exception('Unsupported image type');
+      }
+      request.files.add(file);
+    }
+    print(request.fields.entries.map((e) => '${e.key}: ${e.value}').join('\n'));
+    final response = await request.send();
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to create activity');
+    }
+
+    return;
+  }
+
+  @override
+  Future<void> deleteActivity(
+      {required ObjectId activityId, required String token}) async {
+    await Request.delete('/activity/${activityId.oid}', token: token);
   }
 }
 
