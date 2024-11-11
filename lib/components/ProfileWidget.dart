@@ -20,6 +20,7 @@ class ProfileWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // ignore: dead_code
           (true || user.picture != null && user.picture != "")
               ? AspectRatio(
                   aspectRatio: 1,
@@ -33,6 +34,7 @@ class ProfileWidget extends StatelessWidget {
                     ),
                   ),
                 )
+              // ignore: dead_code
               : const SizedBox(),
           const SizedBox(width: 10),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

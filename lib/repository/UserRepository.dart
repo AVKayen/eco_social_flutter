@@ -1,6 +1,5 @@
 import 'package:bson/bson.dart';
 import 'dart:convert';
-import 'package:provider/provider.dart';
 
 import '../model/User.dart';
 import '../service/Request.dart';

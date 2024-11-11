@@ -8,7 +8,6 @@ import '/controller/CurrentPage.dart';
 import '/repository/UserRepository.dart';
 import '/repository/ActivityRepository.dart';
 
-import '/model/User.dart';
 import '/model/Activity.dart';
 
 import '/components/ActivityWidget.dart';

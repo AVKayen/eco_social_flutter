@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bson/bson.dart';
 import 'package:provider/provider.dart';
 
 import '/controller/CurrentUser.dart';
@@ -8,7 +6,6 @@ import '/controller/CurrentUser.dart';
 import '/repository/ActivityRepository.dart';
 
 import '/model/Activity.dart';
-import '/model/User.dart';
 
 import '/components/ActivityWidget.dart';
 

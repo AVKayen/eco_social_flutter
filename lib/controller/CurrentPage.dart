@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:bson/bson.dart';
 
 import '/view/pages/ActivityView.dart';

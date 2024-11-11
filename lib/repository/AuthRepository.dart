@@ -1,4 +1,3 @@
-import 'package:bson/bson.dart';
 import 'dart:convert';
 
 import '../model/User.dart';
