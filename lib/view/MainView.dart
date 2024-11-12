@@ -72,6 +72,7 @@ class _MainViewState extends State<MainView> {
     TextEditingController titleController = TextEditingController();
     int activityTypeSelected = ActivityType.other;
     List<XFile> images = [];
+    bool isLoading = false;
 
     await showModalBottomSheet(
       context: context,
@@ -142,25 +143,32 @@ class _MainViewState extends State<MainView> {
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final newActivity = ActivityForm(
-                          title: titleController.text,
-                          caption: descController.text,
-                          activityType: activityTypeSelected,
-                          images: images,
-                        );
-                        await _activityRepository.createActivity(
-                            activity: newActivity, token: currentUser.token!);
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Post submitted successfully')),
-                        );
-                        currentUser.loadFromStorage();
-                      },
-                      child: const Text('Submit'),
-                    ),
+                    (isLoading)
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              final newActivity = ActivityForm(
+                                title: titleController.text,
+                                caption: descController.text,
+                                activityType: activityTypeSelected,
+                                images: images,
+                              );
+                              setLocalState(() {
+                                isLoading = true;
+                              });
+                              await _activityRepository.createActivity(
+                                  activity: newActivity,
+                                  token: currentUser.token!);
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Post submitted successfully')),
+                              );
+                              currentUser.loadFromStorage();
+                            },
+                            child: const Text('Submit'),
+                          ),
                   ],
                 ),
               ),
