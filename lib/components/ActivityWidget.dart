@@ -34,56 +34,54 @@ class ActivityWidget extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          (linkToActivity)
-                              ? TextButton(
-                                  onPressed: () {
-                                    currentPage.redirectToActivity(activity.id);
-                                  },
-                                  style: ButtonStyle(
-                                    padding: const WidgetStatePropertyAll(
-                                        EdgeInsets.all(0)),
-                                    overlayColor: WidgetStatePropertyAll(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .secondary
-                                            .withOpacity(0.1)),
-                                  ),
-                                  child: Text(
-                                    activity.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  activity.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.local_fire_department,
-                            size: 20,
+                    (linkToActivity)
+                        ? TextButton(
+                            onPressed: () {
+                              currentPage.redirectToActivity(activity.id);
+                            },
+                            style: ButtonStyle(
+                              padding: const WidgetStatePropertyAll(
+                                  EdgeInsets.all(0)),
+                              overlayColor: WidgetStatePropertyAll(
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.1)),
+                            ),
+                            child: Text(
+                              activity.title,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            activity.title,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
                           ),
-                          Text('${activity.streak}',
-                              style: const TextStyle(fontSize: 15)),
-                          const SizedBox(width: 8),
-                          const Icon(
-                            Icons.star,
-                            size: 20,
-                          ),
-                          Text('${activity.points}',
-                              style: const TextStyle(fontSize: 15)),
-                        ]),
+                    Row(children: [
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.local_fire_department,
+                        size: 20,
+                      ),
+                      Text('${activity.streak}',
+                          style: const TextStyle(fontSize: 15)),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.star,
+                        size: 20,
+                      ),
+                      Text('${activity.points}',
+                          style: const TextStyle(fontSize: 15)),
+                    ]),
                     (showProfile)
                         ? (linkToProfile)
                             ? TextButton(
@@ -115,6 +113,9 @@ class ActivityWidget extends StatelessWidget {
                     Text(activity.activityName,
                         overflow: TextOverflow.fade,
                         style: const TextStyle(fontSize: 15)),
+                    Text(
+                      "${activity.createdAt.day}/${activity.createdAt.month}/${activity.createdAt.year} ${activity.createdAt.hour}:${activity.createdAt.minute.toString().padLeft(2, '0')}",
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

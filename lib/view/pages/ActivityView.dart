@@ -29,17 +29,22 @@ class _ActivityViewState extends State<ActivityView> {
   bool? _isCreator;
 
   void _getActivity() async {
-    late CurrentUser? user;
+    late CurrentUser? currentUser;
 
-    user = Provider.of<CurrentUser>(context, listen: false);
+    currentUser = Provider.of<CurrentUser>(context, listen: false);
+
+    if (currentUser.token == null || currentUser.user == null) {
+      Navigator.pop(context);
+      throw Exception('User not found');
+    }
 
     final Activity? activity = await _activityRepository.getActivity(
-        id: widget.activityId, token: user.token!);
+        id: widget.activityId, token: currentUser.token!);
     if (activity == null) {
       throw Exception('Activity not found');
     }
 
-    if (user.user!.id == activity.userId) {
+    if (currentUser.user!.id == activity.userId) {
       setState(() {
         _isCreator = true;
       });
@@ -69,7 +74,10 @@ class _ActivityViewState extends State<ActivityView> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: _deleteActivity,
+              onPressed: () {
+                _deleteActivity();
+                Navigator.pop(context);
+              },
               child: const Text('Delete'),
             ),
           ],

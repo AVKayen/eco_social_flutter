@@ -22,11 +22,18 @@ class _HomeViewState extends State<HomeView> {
   late List<Activity> _activities = [];
 
   void _getActivites() async {
-    final CurrentUser user = Provider.of<CurrentUser>(context, listen: false);
+    final CurrentUser currentUser =
+        Provider.of<CurrentUser>(context, listen: false);
 
-    final List<Activity> activities =
-        await _activityRepository.getFriendsActivities(token: user.token!);
+    if (currentUser.token == null || currentUser.user == null) {
+      Navigator.pop(context);
+      throw Exception('User not found');
+    }
+
+    final List<Activity> activities = await _activityRepository
+        .getFriendsActivities(token: currentUser.token!);
     setState(() {
+      activities.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       _activities = activities;
     });
   }

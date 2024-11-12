@@ -21,7 +21,7 @@ class ProfileWidget extends StatelessWidget {
       child: Row(
         children: [
           // ignore: dead_code
-          (true || user.picture != null && user.picture != "")
+          (user.picture != null && user.picture != "")
               ? AspectRatio(
                   aspectRatio: 1,
                   child: Container(

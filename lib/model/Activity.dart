@@ -1,5 +1,6 @@
 import 'package:bson/bson.dart';
 import 'package:image_input/image_input.dart';
+import '/constants.dart';
 
 class _JsonKeys {
   static const String id = '_id';
@@ -148,7 +149,9 @@ class Activity {
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
       caption: json[_JsonKeys.caption],
-      images: List<String>.from(json[_JsonKeys.images]),
+      images: List<String>.from(json[_JsonKeys.images]).map((filename) {
+        return '${Constants.imageUrl}$filename';
+      }).toList(),
     );
   }
 }

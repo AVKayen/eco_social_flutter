@@ -32,6 +32,12 @@ class _ProfileViewState extends State<ProfileView> {
   void _getProfile() async {
     final CurrentUser currentUser =
         Provider.of<CurrentUser>(context, listen: false);
+
+    if (currentUser.token == null || currentUser.user == null) {
+      Navigator.pop(context);
+      throw Exception('User not found');
+    }
+
     late dynamic profile;
 
     if (widget.profileId == null) {
@@ -49,7 +55,7 @@ class _ProfileViewState extends State<ProfileView> {
       _profile = profile!;
     });
     if (_profile.runtimeType == PrivateProfile) {
-      for (final ObjectId activityId in _profile!.activities) {
+      for (final ObjectId activityId in _profile!.activities.reversed) {
         final Activity? activity = await _activityRepository.getActivity(
             id: activityId, token: currentUser.token!);
         if (activity != null) {

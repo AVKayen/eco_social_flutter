@@ -1,19 +1,16 @@
 import 'package:http/http.dart' as http;
+import '/constants.dart';
 
 typedef Response = http.Response;
 
 // each method takes a path and an optional token and returns an http.Response
 // post and put methods also take a body json-like map
 class Request {
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = Constants.baseUrl;
 
   static Future<http.Response> _sendRequest(
       Future<http.Response> Function() request) async {
     final response = await request();
-    if (response.statusCode != 200) {
-      throw Exception('Http error: ${response.statusCode}');
-    }
-
     return response;
   }
 

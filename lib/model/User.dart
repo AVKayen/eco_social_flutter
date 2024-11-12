@@ -1,5 +1,6 @@
 import 'package:bson/bson.dart';
 import 'package:image_input/image_input.dart';
+import '/constants.dart';
 
 Function calculateLevel = (int points) {
   return points ~/ 100;
@@ -168,7 +169,9 @@ class User {
       username: json[_JsonKeys.username],
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
-      picture: json[_JsonKeys.picture],
+      picture: (json[_JsonKeys.picture] == '')
+          ? "${Constants.imageUrl}${json[_JsonKeys.picture]}"
+          : null,
       level: calculateLevel(json[_JsonKeys.points]),
       progress: calculateProgress(json[_JsonKeys.points]),
       aboutMe: json[_JsonKeys.aboutMe],
@@ -253,7 +256,9 @@ class PublicProfile {
       username: json[_JsonKeys.username],
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
-      picture: json[_JsonKeys.picture],
+      picture: (json[_JsonKeys.picture] == '')
+          ? "${Constants.imageUrl}${json[_JsonKeys.picture]}"
+          : null,
       level: calculateLevel(json[_JsonKeys.points]),
       progress: calculateProgress(json[_JsonKeys.points]),
       aboutMe: json[_JsonKeys.aboutMe],
@@ -299,7 +304,9 @@ class PrivateProfile extends PublicProfile {
       username: json[_JsonKeys.username],
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],
-      picture: json[_JsonKeys.picture],
+      picture: (json[_JsonKeys.picture] == '')
+          ? "${Constants.imageUrl}${json[_JsonKeys.picture]}"
+          : null,
       level: calculateLevel(json[_JsonKeys.points]),
       progress: calculateProgress(json[_JsonKeys.points]),
       aboutMe: json[_JsonKeys.aboutMe],

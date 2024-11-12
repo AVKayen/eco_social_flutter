@@ -150,7 +150,6 @@ class _MainViewState extends State<MainView> {
                           activityType: activityTypeSelected,
                           images: images,
                         );
-                        print(newActivity);
                         await _activityRepository.createActivity(
                             activity: newActivity, token: currentUser.token!);
                         Navigator.of(context).pop();

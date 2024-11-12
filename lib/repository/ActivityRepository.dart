@@ -65,26 +65,14 @@ class HttpActivityRepository implements ActivityRepository {
 
     for (var i = 0; i < images.length; i++) {
       dynamic file;
-      if (images[i].mimeType == 'image/jpeg') {
-        file = http.MultipartFile.fromBytes(
-          'images',
-          await images[i].readAsBytes(),
-          contentType: MediaType.parse('image/jpeg'),
-          filename: 'image$i.jpg',
-        );
-      } else if (images[i].mimeType == 'image/png') {
-        file = http.MultipartFile.fromBytes(
-          'images',
-          await images[i].readAsBytes(),
-          contentType: MediaType.parse('image/png'),
-          filename: 'image$i.png',
-        );
-      } else {
-        throw Exception('Unsupported image type');
-      }
+      file = http.MultipartFile.fromBytes(
+        'images',
+        await images[i].readAsBytes(),
+        contentType: MediaType.parse('image/jpeg'),
+        filename: 'image$i.png',
+      );
       request.files.add(file);
     }
-    print(request.fields.entries.map((e) => '${e.key}: ${e.value}').join('\n'));
     final response = await request.send();
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to create activity');

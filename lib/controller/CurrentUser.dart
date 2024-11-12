@@ -14,11 +14,12 @@ class CurrentUser extends ChangeNotifier {
     if (_user == null) {
       loadFromStorage();
     }
+
     return _user;
   }
 
   String? get token {
-    if (_token == null) {
+    if (_token == null || _token == '') {
       loadFromStorage();
     }
     return _token;
