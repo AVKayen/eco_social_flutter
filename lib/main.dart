@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'controller/CurrentUser.dart';
 
 import 'components/LoginForm.dart';
@@ -54,27 +54,41 @@ class _App extends State<App> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const LoginForm();
+            Container(
+                padding: const EdgeInsets.all(16),
+                child: SvgPicture.asset('assets/logo.svg')),
+            const Text('An Ecological Social App',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.green,
+                )),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const LoginForm();
+                      },
+                    );
                   },
-                );
-              },
-              child: const Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const SignupForm();
+                  child: const Text('Login'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const SignupForm();
+                      },
+                    );
                   },
-                );
-              },
-              child: const Text('Sign Up'),
+                  child: const Text('Sign Up'),
+                ),
+              ],
             ),
           ],
         ),
