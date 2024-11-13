@@ -127,9 +127,11 @@ class _ActivityViewState extends State<ActivityView> {
               child: ListView(
                 children: [
                   ActivityWidget(
-                      activity: _activity!,
-                      linkToProfile: !_isCreator!,
-                      linkToActivity: false),
+                    activity: _activity!,
+                    linkToProfile: !_isCreator!,
+                    linkToActivity: false,
+                    showImage: false,
+                  ),
                   if (_isCreator!)
                     ElevatedButton(
                       onPressed: _showDeleteDialog,

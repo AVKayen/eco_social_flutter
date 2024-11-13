@@ -12,7 +12,7 @@ abstract class ActivityRepository {
     required String token,
   });
 
-  Future<List<Activity>> getFriendsActivities({
+  Future<List<String>> getFriendsActivities({
     required String token,
     int limit = 10,
   });
@@ -39,11 +39,10 @@ class HttpActivityRepository implements ActivityRepository {
   }
 
   @override
-  Future<List<Activity>> getFriendsActivities(
+  Future<List<String>> getFriendsActivities(
       {required String token, int limit = 10}) async {
     final response = await Request.get('/activity/feed', token: token);
-    return List<Activity>.from(
-        (json.decode(response.body) as List).map((e) => Activity.fromJson(e)));
+    return List<String>.from(json.decode(response.body));
   }
 
   @override

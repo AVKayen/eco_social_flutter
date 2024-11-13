@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bson/bson.dart';
 import 'package:provider/provider.dart';
 
 import '/controller/CurrentUser.dart';
@@ -30,12 +31,18 @@ class _HomeViewState extends State<HomeView> {
       throw Exception('User not found');
     }
 
-    final List<Activity> activities = await _activityRepository
+    final List<String> activities = await _activityRepository
         .getFriendsActivities(token: currentUser.token!);
-    setState(() {
-      activities.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-      _activities = activities;
-    });
+
+    for (final String activityId in activities) {
+      Activity? activity = await _activityRepository.getActivity(
+          id: ObjectId.fromHexString(activityId), token: currentUser.token!);
+      if (activity != null) {
+        setState(() {
+          _activities.add(activity);
+        });
+      }
+    }
   }
 
   @override

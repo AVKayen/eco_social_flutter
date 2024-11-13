@@ -50,6 +50,7 @@ class _LoginFormState extends State<LoginForm> {
               decoration: const InputDecoration(
                 labelText: 'Password',
               ),
+              obscureText: true,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
@@ -80,10 +81,7 @@ class _LoginFormState extends State<LoginForm> {
                       MaterialPageRoute(builder: (context) => const MainView()),
                     );
                   } else {
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Login failed')),
-                    );
+                    throw Exception('Failed to login');
                   }
                 }
               },

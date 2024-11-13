@@ -25,11 +25,6 @@ class CurrentUser extends ChangeNotifier {
     return _token;
   }
 
-  void logout() {
-    _user = null;
-    notifyListeners();
-  }
-
   Future<bool> login(UserForm form) async {
     final Token? token = await _authRepository.login(user: form);
     if (token == null) {
@@ -49,28 +44,47 @@ class CurrentUser extends ChangeNotifier {
   }
 
   Future<bool> register(RegisterForm form) async {
-    try {
-      final Token? token = await _authRepository.register(user: form);
-      if (token == null) {
-        throw Exception('Token not found');
-      }
+    await _authRepository.register(user: form);
 
-      final User? user =
-          await _authRepository.getCurrentUser(token: token.token);
-      if (user == null) {
-        throw Exception('User not found');
-      }
+    UserForm loginForm = UserForm(
+      username: form.username,
+      password: form.password,
+    );
 
-      _token = token.token;
-      _user = user;
-
-      final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-      await asyncPrefs.setString('token', token.token);
-      notifyListeners();
-      return true;
-    } catch (e) {
-      return false;
+    final Token? token = await _authRepository.login(user: loginForm);
+    if (token == null) {
+      throw Exception('Token not found');
     }
+    final User? user = await _authRepository.getCurrentUser(token: token.token);
+    if (user == null) {
+      throw Exception('User not found');
+    }
+    _token = token.token;
+    _user = user;
+
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    await asyncPrefs.setString('token', token.token);
+    return true;
+  }
+
+  Future<void> logout() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    await asyncPrefs.remove('token');
+    _token = null;
+    _user = null;
+    notifyListeners();
+    return;
+  }
+
+  Future<void> refreshUser() async {
+    final User? user = await _authRepository.getCurrentUser(token: token!);
+    if (user == null) {
+      throw Exception('User not found');
+    }
+    _user = user;
+
+    notifyListeners();
+    return;
   }
 
   Future<void> loadFromStorage() async {

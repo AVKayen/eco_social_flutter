@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/User.dart';
+import '/constants.dart';
 
 class ProfileWidget extends StatelessWidget {
   final PublicProfile user;
@@ -21,7 +22,7 @@ class ProfileWidget extends StatelessWidget {
       child: Row(
         children: [
           // ignore: dead_code
-          (user.picture != null && user.picture != "")
+          (user.picture != null && user.picture != Constants.imageUrl)
               ? AspectRatio(
                   aspectRatio: 1,
                   child: Container(

@@ -10,13 +10,15 @@ class ActivityWidget extends StatelessWidget {
   final bool linkToProfile;
   final bool showProfile;
   final bool linkToActivity;
+  final bool showImage;
 
   const ActivityWidget(
       {super.key,
       required this.activity,
       this.linkToProfile = true,
       this.showProfile = true,
-      this.linkToActivity = true});
+      this.linkToActivity = true,
+      this.showImage = true});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +29,23 @@ class ActivityWidget extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         child: Row(
           children: [
+            (activity.images.isNotEmpty && showImage)
+                ? Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      image: DecorationImage(
+                        image: NetworkImage(activity.images[0]),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  )
+                : const SizedBox(width: 0),
+            SizedBox(width: (activity.images.isNotEmpty) ? 10 : 0),
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width - 104,
+                maxWidth: MediaQuery.of(context).size.width - 270,
               ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,13 +114,13 @@ class ActivityWidget extends StatelessWidget {
                                   currentPage
                                       .redirectToProfile(activity.userId);
                                 },
-                                child: Text('${activity.userId}',
+                                child: Text(activity.username,
                                     style: const TextStyle(
                                         fontSize: 15,
                                         overflow: TextOverflow.ellipsis,
                                         decoration: TextDecoration.underline)),
                               )
-                            : Text('${activity.userId}',
+                            : Text(activity.username,
                                 style: const TextStyle(
                                   fontSize: 15,
                                   overflow: TextOverflow.ellipsis,

@@ -59,12 +59,12 @@ class UserForm {
 }
 
 class RegisterForm extends UserForm {
-  final XFile picture;
+  final XFile? picture;
 
   RegisterForm({
     required super.username,
     required super.password,
-    required this.picture,
+    this.picture,
   });
 
   @override
@@ -111,16 +111,19 @@ class Token {
 class FriendshipRequest {
   final ObjectId userId;
   final DateTime sentAt;
+  final String username;
 
   FriendshipRequest({
     required this.userId,
     required this.sentAt,
+    this.username = '',
   });
 
   factory FriendshipRequest.fromJson(Map<String, dynamic> json) {
     return FriendshipRequest(
       userId: ObjectId.fromHexString(json[_JsonKeys.userId]),
       sentAt: DateTime.parse(json[_JsonKeys.sentAt]),
+      username: json[_JsonKeys.username],
     );
   }
 
@@ -128,39 +131,31 @@ class FriendshipRequest {
     return {
       _JsonKeys.userId: userId,
       _JsonKeys.sentAt: sentAt.toIso8601String(),
+      _JsonKeys.username: username,
     };
   }
 }
 
-class User {
-  final String? picture;
-  final ObjectId id;
-  final String username;
-  final int streak;
-  final int points;
-  final int level;
-  final int progress;
-  final String? aboutMe;
-  final List<ObjectId> activities;
-  final List<ObjectId> friends;
+class User extends PrivateProfile {
   final List<FriendshipRequest> incomingRequests;
   final List<FriendshipRequest> outgoingRequests;
-  final DateTime lastTimeOnStreak;
+  final DateTime? lastTimeOnStreak;
 
   User({
-    required this.id,
-    required this.username,
-    this.picture,
-    required this.streak,
-    required this.points,
-    this.aboutMe = '',
-    this.level = 0,
-    this.progress = 0,
-    this.activities = const [],
-    this.friends = const [],
+    required super.id,
+    required super.username,
+    super.picture,
+    required super.streak,
+    required super.points,
+    super.aboutMe,
+    super.level,
+    super.progress,
+    super.friendCount,
+    super.activities = const [],
+    super.friends = const [],
     this.incomingRequests = const [],
     this.outgoingRequests = const [],
-    required this.lastTimeOnStreak,
+    this.lastTimeOnStreak,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -179,6 +174,7 @@ class User {
           json[_JsonKeys.activities].map((id) => ObjectId.fromHexString(id))),
       friends: List<ObjectId>.from(
           json[_JsonKeys.friends].map((id) => ObjectId.fromHexString(id))),
+      friendCount: json[_JsonKeys.friends].length,
       incomingRequests: List<FriendshipRequest>.from(
         json[_JsonKeys.incomingRequests]
             .map((request) => FriendshipRequest.fromJson(request)),
@@ -187,14 +183,15 @@ class User {
         json[_JsonKeys.outgoingRequests]
             .map((request) => FriendshipRequest.fromJson(request)),
       ),
-      lastTimeOnStreak: DateTime.parse(json[_JsonKeys.lastTimeOnStreak]),
+      lastTimeOnStreak: (json[_JsonKeys.lastTimeOnStreak] == null)
+          ? null
+          : DateTime.parse(json[_JsonKeys.lastTimeOnStreak]),
     );
-
-    print(user.toJson());
 
     return user;
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       _JsonKeys.id: id.oid,
@@ -208,22 +205,6 @@ class User {
       _JsonKeys.outgoingRequests:
           outgoingRequests.map((request) => request.toJson()).toList(),
     };
-  }
-
-  PrivateProfile toPrivateProfile() {
-    return PrivateProfile(
-      id: id,
-      username: username,
-      picture: picture,
-      streak: streak,
-      points: points,
-      level: level,
-      progress: progress,
-      aboutMe: aboutMe,
-      activities: activities,
-      friends: friends,
-      friendCount: friends.length,
-    );
   }
 }
 

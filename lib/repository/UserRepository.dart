@@ -10,22 +10,19 @@ abstract class UserRepository {
 
   Future<void> deleteUser({required ObjectId id, required String token});
 
-  /*
-  Future<User> addFriend(
-      {required ObjectId userId, required ObjectId friendId});
+  Future<String> addFriend({required ObjectId userId, required String token});
 
-  Future<User> removeFriend(
-      {required ObjectId userId, required ObjectId friendId});
+  Future<String> removeFriend(
+      {required ObjectId userId, required String token});
 
-  Future<User> acceptFriendRequest(
-      {required ObjectId userId, required ObjectId requestId});
+  Future<String> acceptFriendRequest(
+      {required ObjectId userId, required String token});
 
-  Future<User> rejectFriendRequest(
-      {required ObjectId userId, required ObjectId requestId});
+  Future<String> rejectFriendRequest(
+      {required ObjectId userId, required String token});
 
-  Future<User> sendFriendRequest(
-      {required ObjectId userId, required ObjectId friendId});
-  */
+  Future<List<PublicProfile>> searchUsers(
+      {required String query, required String token});
 }
 
 class HttpUserRepository implements UserRepository {
@@ -49,5 +46,64 @@ class HttpUserRepository implements UserRepository {
       throw Exception('Failed to delete user');
     }
     return;
+  }
+
+  @override
+  Future<String> addFriend(
+      {required ObjectId userId, required String token}) async {
+    Map<String, String> body = {'user_id': userId.oid};
+    final response = await Request.post(
+        '/user/invitation/send', token: token, jsonEncode(body));
+    if (response.statusCode != 200 || response.statusCode != 201) {
+      throw Exception('Failed to send friend request');
+    }
+    return response.body;
+  }
+
+  @override
+  Future<String> removeFriend(
+      {required ObjectId userId, required String token}) async {
+    Map<String, String> body = {'user_id': userId.oid};
+    final response = await Request.delete('/user/delete-friend',
+        token: token, body: jsonEncode(body));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to remove friend');
+    }
+    return response.body;
+  }
+
+  @override
+  Future<String> acceptFriendRequest(
+      {required ObjectId userId, required String token}) async {
+    Map<String, String> body = {'user_id': userId.oid};
+    final response = await Request.post(
+        '/user/invitation/accept', token: token, jsonEncode(body));
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to accept friend request');
+    }
+    return response.body;
+  }
+
+  @override
+  Future<String> rejectFriendRequest(
+      {required ObjectId userId, required String token}) async {
+    Map<String, String> body = {'user_id': userId.oid};
+    final response = await Request.delete('/user/invitation/decline',
+        token: token, body: jsonEncode(body));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to reject friend request');
+    }
+    return response.body;
+  }
+
+  @override
+  Future<List<PublicProfile>> searchUsers(
+      {required String query, required String token}) async {
+    final response = await Request.get('/user/find/$query', token: token);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to search users');
+    }
+    return List<PublicProfile>.from((json.decode(response.body) as List)
+        .map((e) => PublicProfile.fromJson(e)));
   }
 }

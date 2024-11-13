@@ -10,6 +10,7 @@ class _JsonKeys {
   static const String createdAt = 'created_at';
   static const String images = 'images';
   static const String userId = 'user_id';
+  static const String username = 'username';
   static const String streak = 'streak_snapshot';
   static const String points = 'points_gained';
 }
@@ -121,6 +122,7 @@ class Activity {
   final String activityName;
   final String title;
   final ObjectId userId;
+  final String username;
   final DateTime createdAt;
   final int streak;
   final int points;
@@ -132,6 +134,7 @@ class Activity {
     required this.activityName,
     required this.title,
     required this.userId,
+    this.username = '',
     required this.createdAt,
     required this.streak,
     required this.points,
@@ -145,6 +148,7 @@ class Activity {
       activityName: activityNameFromType[json[_JsonKeys.activityType]]!,
       title: json[_JsonKeys.title],
       userId: ObjectId.fromHexString(json[_JsonKeys.userId]),
+      username: json[_JsonKeys.username] ?? '',
       createdAt: DateTime.parse(json[_JsonKeys.createdAt]),
       streak: json[_JsonKeys.streak],
       points: json[_JsonKeys.points],

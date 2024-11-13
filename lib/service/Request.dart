@@ -36,7 +36,7 @@ class Request {
 
   static Future<http.Response> post(
     String path,
-    Map<String, dynamic> body, {
+    dynamic body, {
     String? token,
     Map<String, String>? headers,
   }) async {
@@ -47,7 +47,7 @@ class Request {
         ));
   }
 
-  static Future<http.Response> put(String path, Map<String, dynamic> body,
+  static Future<http.Response> put(String path, dynamic body,
       {String? token, Map<String, String>? headers}) async {
     return _sendRequest(() => http.put(
           Uri.parse('$baseUrl$path'),
@@ -57,10 +57,11 @@ class Request {
   }
 
   static Future<http.Response> delete(String path,
-      {String? token, Map<String, String>? headers}) async {
+      {String? token, Map<String, String>? headers, dynamic body}) async {
     return _sendRequest(() => http.delete(
           Uri.parse('$baseUrl$path'),
           headers: _createHeaders(token: token, predefHeaders: headers),
+          body: body,
         ));
   }
 }

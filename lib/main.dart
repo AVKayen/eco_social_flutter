@@ -28,7 +28,10 @@ class EcoSocial extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
         ),
-        home: const App(),
+        initialRoute: '/',
+        routes: {
+          '/': (BuildContext context) => const App(),
+        },
       ),
     );
   }

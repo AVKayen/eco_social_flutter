@@ -8,7 +8,7 @@ abstract class AuthRepository {
 
   Future<Token?> login({required UserForm user});
 
-  Future<Token?> register({required RegisterForm user});
+  Future<void> register({required RegisterForm user});
 }
 
 class HttpAuthRepository implements AuthRepository {
@@ -37,7 +37,7 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Token?> register({required RegisterForm user}) async {
+  Future<void> register({required RegisterForm user}) async {
     // TEMP
     UserForm userForm = UserForm(
       username: user.username,
@@ -50,9 +50,10 @@ class HttpAuthRepository implements AuthRepository {
 
     final Response response =
         await Request.post('/signup', userForm.toJson(), headers: headers);
-    if (response.statusCode == 200) {
-      return Token.fromJson(json.decode(response.body));
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to register');
     }
-    return null;
+    return;
   }
 }

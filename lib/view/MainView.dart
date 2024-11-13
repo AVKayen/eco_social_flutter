@@ -165,7 +165,7 @@ class _MainViewState extends State<MainView> {
                                     content:
                                         Text('Post submitted successfully')),
                               );
-                              currentUser.loadFromStorage();
+                              currentUser.refreshUser();
                             },
                             child: const Text('Submit'),
                           ),
@@ -205,22 +205,23 @@ class _MainViewState extends State<MainView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(_pages[_selectedIndex]['title']),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.local_fire_department,
-                          ),
-                          Text('${_user.streak}',
-                              style: const TextStyle(fontSize: 16)),
-                          const SizedBox(width: 16),
-                          const Icon(
-                            Icons.star,
-                          ),
-                          Text('${_user.points}',
-                              style: const TextStyle(fontSize: 16)),
-                        ],
-                      ),
+                      Consumer<CurrentUser>(
+                          builder: (context, currentUser, child) => Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.local_fire_department,
+                                  ),
+                                  Text('${currentUser.user!.streak}',
+                                      style: const TextStyle(fontSize: 16)),
+                                  const SizedBox(width: 16),
+                                  const Icon(
+                                    Icons.star,
+                                  ),
+                                  Text('${currentUser.user!.points}',
+                                      style: const TextStyle(fontSize: 16)),
+                                ],
+                              )),
                     ],
                   ),
                 ),

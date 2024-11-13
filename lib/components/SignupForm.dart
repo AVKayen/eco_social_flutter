@@ -33,14 +33,14 @@ class _SignupFormState extends State<SignupForm> {
                 style: TextStyle(
                   fontSize: 24,
                 )),
-            ImageInput(
-              images: _image == null ? null : [_image!],
-              onImageSelected: (XFile image) {
-                setState(() {
-                  _image = image;
-                });
-              },
-            ),
+            // ImageInput(
+            //   images: (_image == null) ? null : [_image!],
+            //   onImageSelected: (XFile image) {
+            //     setState(() {
+            //       _image = image;
+            //     });
+            //   },
+            // ),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'Username',
@@ -60,6 +60,7 @@ class _SignupFormState extends State<SignupForm> {
               decoration: const InputDecoration(
                 labelText: 'Password',
               ),
+              obscureText: true,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
@@ -78,23 +79,23 @@ class _SignupFormState extends State<SignupForm> {
                   final formData = RegisterForm(
                     username: _username!,
                     password: _password!,
-                    picture: _image!,
+                    picture: _image,
                   );
                   final bool success = await _currentUser.register(formData);
                   if (success) {
+                    await _currentUser.login(UserForm(
+                      username: _username!,
+                      password: _password!,
+                    ));
                     Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => const MainView()),
                     );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Login failed')),
-                    );
                   }
                 }
               },
-              child: const Text('Login'),
+              child: const Text('Register'),
             ),
           ],
         ),
