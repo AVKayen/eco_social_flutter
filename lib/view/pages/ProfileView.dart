@@ -159,7 +159,11 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
               ],
             )
-          : const Text('No pending requests');
+          : const Column(
+              children: [
+                Text('No pending requests'),
+              ],
+            );
     }
 
     Widget friendsList() {
@@ -216,17 +220,23 @@ class _ProfileViewState extends State<ProfileView> {
               title: SegmentedButton(
                 segments: const [
                   ButtonSegment(
-                      value: 0,
-                      label: Text('Pending Requests'),
-                      icon: Icon(Icons.person_add_alt_1_rounded)),
+                    value: 0,
+                    label: Text('Requests',
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontSize: 10, overflow: TextOverflow.clip)),
+                    icon: Icon(Icons.mail),
+                  ),
                   ButtonSegment(
-                      value: 1,
-                      label: Text('Friends'),
-                      icon: Icon(Icons.people)),
+                    value: 1,
+                    label: Text('Friends', style: TextStyle(fontSize: 10)),
+                    icon: Icon(Icons.people),
+                  ),
                   ButtonSegment(
-                      value: 2,
-                      label: Text('Add Friends'),
-                      icon: Icon(Icons.person_add)),
+                    value: 2,
+                    label: Text('Add Friends', style: TextStyle(fontSize: 10)),
+                    icon: Icon(Icons.person_add),
+                  ),
                 ],
                 selected: selected,
                 onSelectionChanged: (Set<int> value) {
@@ -354,6 +364,13 @@ class _ProfileViewState extends State<ProfileView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
+                          onPressed: () {
+                            _showFriendsDialog();
+                          },
+                          child: const Text('Friends'),
+                        ),
+                        const SizedBox(width: 16),
+                        ElevatedButton(
                           onPressed: () async {
                             await _currentUser.logout();
                             Navigator.pushNamedAndRemoveUntil(
@@ -364,13 +381,6 @@ class _ProfileViewState extends State<ProfileView> {
                                 (route) => false);
                           },
                           child: const Text('Logout'),
-                        ),
-                        const SizedBox(width: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            _showFriendsDialog();
-                          },
-                          child: const Text('Friends'),
                         ),
                       ],
                     )
