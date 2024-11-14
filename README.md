@@ -1,5 +1,6 @@
-# GreenBuddies
+<p align="center"><img width=100% src="https://github.com/AVKayen/eco_social_flutter/blob/main/assets/logo.svg"></p>
 
+## Overview
 GreenBuddies is a mobile application written in Flutter with a goal of helping users connect to other ecology enthusiasts.
 The app is designed to motivate users to share their experiences with nature and keep track with their friends'.
 
