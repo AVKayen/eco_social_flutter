@@ -41,4 +41,4 @@ flutter build linux --release
 
 
 ## Licence
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/AVKayen/eco_social_flutter/blob/main/LICENSE)
