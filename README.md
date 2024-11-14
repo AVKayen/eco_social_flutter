@@ -17,7 +17,22 @@ flutter build linux --release
 ```
 
 ## Features
-//TODO
+
+- User authentication
+- User profile
+- Posts
+- Streak and points
+- Friends
+
+## TBD
+
+- Notifications
+- Comments
+- Profile pictures*
+- Friend recommendations*
+
+
+\* - already in the FastAPI backend implementation
 
 ## Backend repository
 
