@@ -31,7 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
   final List<Activity> _activities = [];
   late CurrentUser _currentUser;
   late CurrentPage _currentPage;
-  List<PrivateProfile> _friends = [];
+  final List<PrivateProfile> _friends = [];
   bool _isCurrentUser = false;
 
   void _getProfile() async {
@@ -358,33 +358,48 @@ class _ProfileViewState extends State<ProfileView> {
           )
         : Column(
             children: [
-              ProfileWidget(user: _profile!),
-              (_isCurrentUser)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _showFriendsDialog();
-                          },
-                          child: const Text('Friends'),
-                        ),
-                        const SizedBox(width: 16),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await _currentUser.logout();
-                            Navigator.pushNamedAndRemoveUntil(
-                                // below line is safe as we are using custom router
-                                // ignore: use_build_context_synchronously
-                                context,
-                                '/',
-                                (route) => false);
-                          },
-                          child: const Text('Logout'),
-                        ),
-                      ],
-                    )
-                  : Container(),
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      ProfileWidget(user: _profile!),
+                      SizedBox(height: (_isCurrentUser) ? 16 : 0),
+                      (_isCurrentUser)
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _showFriendsDialog();
+                                  },
+                                  child: const Text('Friends'),
+                                ),
+                                const SizedBox(width: 16),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _currentUser.logout();
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        // below line is safe as we are using custom router
+                                        // ignore: use_build_context_synchronously
+                                        context,
+                                        '/',
+                                        (route) => false);
+                                  },
+                                  child: const Text('Logout'),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                    ],
+                  )),
               Expanded(
                 child: ListView.builder(
                   itemCount: _activities.length,

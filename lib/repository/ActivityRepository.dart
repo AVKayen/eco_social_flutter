@@ -35,7 +35,7 @@ class HttpActivityRepository implements ActivityRepository {
     final response = await Request.get('/activity/${id.oid}', token: token);
     if (response.statusCode != 200) return null;
 
-    return Activity.fromJson(json.decode(response.body));
+    return Activity.fromJson(json.decode(utf8.decode(response.bodyBytes)));
   }
 
   @override

@@ -34,9 +34,10 @@ class HttpUserRepository implements UserRepository {
       throw Exception('Failed to get user profile');
     }
     if (json.decode(response.body).containsKey('activities')) {
-      return PrivateProfile.fromJson(json.decode(response.body));
+      return PrivateProfile.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
     }
-    return PublicProfile.fromJson(json.decode(response.body));
+    return PublicProfile.fromJson(json.decode(utf8.decode(response.bodyBytes)));
   }
 
   @override
@@ -103,7 +104,8 @@ class HttpUserRepository implements UserRepository {
     if (response.statusCode != 200) {
       throw Exception('Failed to search users');
     }
-    return List<PublicProfile>.from((json.decode(response.body) as List)
-        .map((e) => PublicProfile.fromJson(e)));
+    return List<PublicProfile>.from(
+        (json.decode(utf8.decode(response.bodyBytes)) as List)
+            .map((e) => PublicProfile.fromJson(e)));
   }
 }

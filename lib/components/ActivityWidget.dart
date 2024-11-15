@@ -37,16 +37,13 @@ class ActivityWidget extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       image: DecorationImage(
                         image: NetworkImage(activity.images[0]),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   )
                 : const SizedBox(width: 0),
             SizedBox(width: (activity.images.isNotEmpty) ? 10 : 0),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width - 270,
-              ),
+            Expanded(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,7 +63,7 @@ class ActivityWidget extends StatelessWidget {
                             ),
                             child: Text(
                               activity.title,
-                              maxLines: 3,
+                              maxLines: (linkToActivity) ? 3 : 30,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 20,
@@ -76,7 +73,7 @@ class ActivityWidget extends StatelessWidget {
                           )
                         : Text(
                             activity.title,
-                            maxLines: 3,
+                            maxLines: (linkToActivity) ? 3 : 30,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 20,
@@ -138,7 +135,7 @@ class ActivityWidget extends StatelessWidget {
                     (activity.caption != "" || activity.caption != null)
                         ? Text(activity.caption!,
                             overflow: TextOverflow.fade,
-                            maxLines: 3,
+                            maxLines: (linkToActivity) ? 3 : 300,
                             textWidthBasis: TextWidthBasis.longestLine,
                             style: const TextStyle(
                               fontSize: 15,

@@ -147,6 +147,22 @@ class _MainViewState extends State<MainView> {
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: () async {
+                              if (titleController.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    margin: EdgeInsets.only(
+                                        bottom:
+                                            MediaQuery.of(context).size.height -
+                                                150,
+                                        right: 20,
+                                        left: 20),
+                                    content:
+                                        const Text('Title cannot be empty'),
+                                  ),
+                                );
+                                return;
+                              }
                               final newActivity = ActivityForm(
                                 title: titleController.text,
                                 caption: descController.text,
@@ -190,11 +206,22 @@ class _MainViewState extends State<MainView> {
       },
       child: ChangeNotifierProvider(
         create: (context) => currentPage,
-        child: (_pages.isEmpty)
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Scaffold(
+        builder: (context, child) {
+          if (_pages.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return RefreshIndicator(
+              onRefresh: () async {
+                final currentUser =
+                    Provider.of<CurrentUser>(context, listen: false);
+                final currentPageProvider =
+                    Provider.of<CurrentPage>(context, listen: false);
+                await currentUser.refreshUser();
+                currentPageProvider.refresh();
+              },
+              child: Scaffold(
                 body: Consumer<CurrentPage>(
                   builder: (context, currentPage, child) {
                     return currentPage.currentPage!;
@@ -238,6 +265,9 @@ class _MainViewState extends State<MainView> {
                   onTap: _onItemTapped,
                 ),
               ),
+            );
+          }
+        },
       ),
     );
   }
