@@ -23,10 +23,10 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="3.08554"
-     inkscape:cx="280.17786"
+     inkscape:cx="280.01582"
      inkscape:cy="58.498674"
-     inkscape:window-width="1591"
-     inkscape:window-height="1144"
+     inkscape:window-width="1249"
+     inkscape:window-height="1368"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -35,10 +35,10 @@
      id="defs1">
     <inkscape:path-effect
        effect="powermask"
-       id="path-effect48"
+       id="path-effect50"
        is_visible="true"
        lpeversion="1"
-       uri="#mask-powermask-path-effect48"
+       uri="#mask-powermask-path-effect50"
        invert="false"
        hide_mask="false"
        background="true"
@@ -240,39 +240,6 @@
          values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 "
          in="fbSourceGraphic" />
     </filter>
-    <mask
-       maskUnits="userSpaceOnUse"
-       id="mask-powermask-path-effect48">
-      <path
-         id="mask-powermask-path-effect48_box"
-         style="fill:#ffffff;fill-opacity:1"
-         d="m 389.80653,477.14547 h 52.304 v 102.15866 h -52.304 z" />
-      <g
-         id="g48"
-         style="display:inline"
-         inkscape:label="g37"
-         transform="translate(54.620621,469.56085)">
-        <path
-           id="path46"
-           d="m 0,0 c 1.002,2.834 1.952,6.56 2.069,9.241 0.027,0.613 0.717,3.617 1.206,3.987 2.549,1.927 2.642,-3.764 1.853,-5.563"
-           style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-           transform="matrix(1.3333333,0,0,-1.3333333,343.78871,51.42662)"
-           clip-path="url(#clipPath36)" />
-        <path
-           id="path47"
-           d="M 0,0 C 5.154,1.664 7.596,3.909 9.847,6.703"
-           style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-           transform="matrix(1.3333333,0,0,-1.3333333,359.06978,102.21288)"
-           clip-path="url(#clipPath34)" />
-        <path
-           id="path48"
-           d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
-           style="display:inline;fill:#2196f3;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-           transform="matrix(1.3333333,0,0,-1.3333333,369.69031,28.77582)"
-           clip-path="url(#clipPath32)"
-           inkscape:label="clip" />
-      </g>
-    </mask>
     <filter
        id="mask-powermask-path-effect48_inverse"
        inkscape:label="filtermask-powermask-path-effect48"
@@ -291,6 +258,96 @@
          values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 "
          in="fbSourceGraphic" />
     </filter>
+    <filter
+       id="mask-powermask-path-effect50_inverse"
+       inkscape:label="filtermask-powermask-path-effect50"
+       style="color-interpolation-filters:sRGB"
+       height="100"
+       width="100"
+       x="-50"
+       y="-50">
+      <feColorMatrix
+         id="mask-powermask-path-effect50_primitive1"
+         values="1"
+         type="saturate"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         id="mask-powermask-path-effect50_primitive2"
+         values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 "
+         in="fbSourceGraphic" />
+    </filter>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask1">
+      <g
+         id="g39"
+         transform="matrix(0.75000002,0,0,-0.75000002,-277.26774,21.581866)">
+        <path
+           id="path33"
+           style="fill:#ffffff;fill-opacity:1"
+           d="m 335.18591,7.58462 h 52.304 v 102.15866 h -52.304 z" />
+        <g
+           id="g38"
+           style="display:inline"
+           inkscape:label="g37">
+          <path
+             id="path35"
+             d="m 0,0 c 1.002,2.834 1.952,6.56 2.069,9.241 0.027,0.613 0.717,3.617 1.206,3.987 2.549,1.927 2.642,-3.764 1.853,-5.563"
+             style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             transform="matrix(1.3333333,0,0,-1.3333333,343.78871,51.42662)"
+             clip-path="url(#clipPath36)" />
+          <path
+             id="path37"
+             d="M 0,0 C 5.154,1.664 7.596,3.909 9.847,6.703"
+             style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             transform="matrix(1.3333333,0,0,-1.3333333,359.06978,102.21288)"
+             clip-path="url(#clipPath34)" />
+          <path
+             id="path38"
+             d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
+             style="display:inline;fill:#2196f3;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             transform="matrix(1.3333333,0,0,-1.3333333,369.69031,28.77582)"
+             clip-path="url(#clipPath32)"
+             inkscape:label="clip" />
+        </g>
+      </g>
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask39">
+      <g
+         id="g43"
+         transform="matrix(0.75000002,0,0,-0.75000002,-263.40144,74.912462)">
+        <path
+           id="path39"
+           style="fill:#ffffff;fill-opacity:1"
+           d="m 335.18591,7.58462 h 52.304 v 102.15866 h -52.304 z" />
+        <g
+           id="g42"
+           style="display:inline"
+           inkscape:label="g37">
+          <path
+             id="path40"
+             d="m 0,0 c 1.002,2.834 1.952,6.56 2.069,9.241 0.027,0.613 0.717,3.617 1.206,3.987 2.549,1.927 2.642,-3.764 1.853,-5.563"
+             style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             transform="matrix(1.3333333,0,0,-1.3333333,343.78871,51.42662)"
+             clip-path="url(#clipPath36)" />
+          <path
+             id="path41"
+             d="M 0,0 C 5.154,1.664 7.596,3.909 9.847,6.703"
+             style="display:inline;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             transform="matrix(1.3333333,0,0,-1.3333333,359.06978,102.21288)"
+             clip-path="url(#clipPath34)" />
+          <path
+             id="path42"
+             d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
+             style="display:inline;fill:#2196f3;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             transform="matrix(1.3333333,0,0,-1.3333333,369.69031,28.77582)"
+             clip-path="url(#clipPath32)"
+             inkscape:label="clip" />
+        </g>
+      </g>
+    </mask>
   </defs>
   <g
      id="layer-MC0"
@@ -380,21 +437,14 @@
        style="display:inline;fill:#4caf50;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,140.43093,526.0672)"
        clip-path="url(#clipPath30)" />
-  </g>
-  <g
-     id="g38"
-     style="display:inline"
-     transform="translate(-54.620621,-469.56085)"
-     mask="url(#mask-powermask-path-effect48)"
-     inkscape:path-effect="#path-effect48">
     <path
        id="path11"
        d="m 0,0 c 5.744,0 9.01,0.45 11.487,1.576 4.506,2.253 7.208,6.645 7.208,12.051 0,8.784 -6.306,13.852 -17.344,13.852 H -3.491 V 0 Z m 1.013,34.124 c 4.956,0 8.335,0.676 11.037,2.253 4.281,2.59 6.645,7.095 6.645,12.614 0,8.784 -5.181,12.951 -15.88,12.951 H -3.491 V 34.124 Z m -0.788,34.35 c 7.096,0 12.051,-0.788 15.542,-2.59 6.757,-3.266 10.699,-9.573 10.699,-17.119 0,-7.546 -4.167,-14.19 -11.15,-17.682 7.659,-4.392 11.15,-9.797 11.15,-17.569 0,-7.996 -4.28,-14.978 -11.262,-18.132 C 12.163,-5.969 7.659,-6.645 0.789,-6.645 h -12.051 v 75.119 z"
-       style="fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="display:inline;fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,405.82253,569.44413)"
        clip-path="url(#clipPath12)"
        inkscape:label="the B"
-       inkscape:original-d="m 0,0 c 5.744,0 9.01,0.45 11.487,1.576 4.506,2.253 7.208,6.645 7.208,12.051 0,8.784 -6.306,13.852 -17.344,13.852 H -3.491 V 0 Z m 1.013,34.124 c 4.956,0 8.335,0.676 11.037,2.253 4.281,2.59 6.645,7.095 6.645,12.614 0,8.784 -5.181,12.951 -15.88,12.951 H -3.491 V 34.124 Z m -0.788,34.35 c 7.096,0 12.051,-0.788 15.542,-2.59 6.757,-3.266 10.699,-9.573 10.699,-17.119 0,-7.546 -4.167,-14.19 -11.15,-17.682 7.659,-4.392 11.15,-9.797 11.15,-17.569 0,-7.996 -4.28,-14.978 -11.262,-18.132 C 12.163,-5.969 7.659,-6.645 0.789,-6.645 h -12.051 v 75.119 z" />
+       mask="url(#mask39)" />
     <path
        id="path31"
        d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
@@ -402,6 +452,14 @@
        transform="matrix(1.3333333,0,0,-1.3333333,424.31093,498.33667)"
        clip-path="url(#clipPath32)"
        inkscape:label="the DROPLET"
-       inkscape:original-d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0" />
+       mask="url(#mask1)" />
+    <path
+       id="path43"
+       d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
+       style="display:inline;fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:0"
+       transform="matrix(1.3333333,0,0,-1.3333333,424.31093,498.33667)"
+       clip-path="url(#clipPath32)"
+       inkscape:label="the DROPLET"
+       mask="none" />
   </g>
 </svg>
