@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="3.08554"
-     inkscape:cx="280.01582"
+     inkscape:cx="280.17786"
      inkscape:cy="58.498674"
-     inkscape:window-width="1249"
+     inkscape:window-width="2015"
      inkscape:window-height="1368"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -443,23 +443,15 @@
        style="display:inline;fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:none"
        transform="matrix(1.3333333,0,0,-1.3333333,405.82253,569.44413)"
        clip-path="url(#clipPath12)"
-       inkscape:label="the B"
+       inkscape:label="path30"
        mask="url(#mask39)" />
-    <path
-       id="path31"
-       d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
-       style="display:inline;fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:0"
-       transform="matrix(1.3333333,0,0,-1.3333333,424.31093,498.33667)"
-       clip-path="url(#clipPath32)"
-       inkscape:label="the DROPLET"
-       mask="url(#mask1)" />
     <path
        id="path43"
        d="m 0,0 c -2.009,-1.037 -3.467,-2.886 -4.708,-4.775 -2.832,-4.31 -4.88,-9.133 -6.012,-14.164 -0.46,-2.042 -0.769,-4.167 -0.372,-6.222 1.257,-6.504 8.848,-10.17 10.494,-16.587 2.001,-7.808 -4.218,-12.424 -8.887,-13.213 -5.111,-0.864 -10.95,3.165 -12.117,9.035 -2.638,13.272 0.141,27.612 8.06,38.584 2.007,2.782 4.373,5.399 7.385,7.039 C -3.144,1.337 0.609,1.883 0,0"
        style="display:inline;fill:#2196f3;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:0"
        transform="matrix(1.3333333,0,0,-1.3333333,424.31093,498.33667)"
        clip-path="url(#clipPath32)"
-       inkscape:label="the DROPLET"
+       inkscape:label="path31"
        mask="none" />
   </g>
 </svg>
