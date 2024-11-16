@@ -1,4 +1,4 @@
-package com.example.eco_social_flutter
+package com.gbw.green_buddies
 
 import io.flutter.embedding.android.FlutterActivity
 
