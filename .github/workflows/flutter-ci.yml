@@ -35,5 +35,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: green_buddies_v${{steps.yq.outputs.stdout}}
+          name: green_buddies_v${{steps.yq.outputs.result}}
           path: build/app/outputs/apk/release/app-release.apk
